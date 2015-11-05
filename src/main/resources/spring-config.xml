@@ -3,9 +3,16 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
-    <bean id="client" class="com.mylab.spring.client.Client"/>
+    <bean id="client" class="com.mylab.spring.client.Client">
+        <!-- constructor bean injection -->
+        <constructor-arg value="1" index="0"/><!--type="java.lang.Long" name="id" -->
+        <constructor-arg value="J. Doe" index="1"/>
+    </bean>
 
-    <bean id="eventLogger" class="com.mylab.spring.logging.EventLogger" />
+    <bean id="eventLogger" class="com.mylab.spring.logging.ConsoleEventLogger" />
 
-    <bean id="app" class="com.mylab.spring.App" />
+    <bean id="app" class="com.mylab.spring.App">
+        <constructor-arg ref="client"/>
+        <constructor-arg ref="eventLogger"/>
+    </bean>
 </beans>

@@ -5,20 +5,20 @@ package com.mylab.spring.client;
  */
 public class Client {
 
-    private Long Id;
+    private Long id;
     private String fullName;
 
     public Client(Long id, String fullName) {
-        Id = id;
+        this.id = id;
         this.fullName = fullName;
     }
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getFullName() {
