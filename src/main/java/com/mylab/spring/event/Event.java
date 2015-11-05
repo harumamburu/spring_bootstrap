@@ -1,5 +1,6 @@
 package com.mylab.spring.event;
 
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.Random;
 
@@ -9,10 +10,12 @@ public class Event {
 
     private final long id;
     private final Date creationDate;
+    private final DateFormat dateFormat;
     private String event;
 
-    public Event(Date creationDate) {
+    public Event(Date creationDate, DateFormat dateFormat) {
         this.creationDate = creationDate;
+        this.dateFormat = dateFormat;
         id = RANDOMIZER.nextInt(Integer.MAX_VALUE);
     }
 
@@ -26,6 +29,6 @@ public class Event {
 
     @Override
     public String toString() {
-        return String.format("Event # %d:%s occurred %F", id, event, creationDate);
+        return String.format("Event # %d:%s occurred %s", id, event, dateFormat.format(creationDate));
     }
 }

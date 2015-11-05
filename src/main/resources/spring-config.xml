@@ -9,7 +9,13 @@
         <constructor-arg value="J. Doe" index="1"/>
     </bean>
 
-    <bean id="eventLogger" class="com.mylab.spring.logging.ConsoleEventLogger" />
+    <bean id="eventLogger" class="com.mylab.spring.logging.ConsoleEventLogger"/>
+
+    <bean id="event" class="com.mylab.spring.event.Event" scope="prototype">
+        <constructor-arg>
+            <bean class="java.util.Date"/>
+        </constructor-arg>
+    </bean>
 
     <bean id="app" class="com.mylab.spring.App">
         <constructor-arg ref="client"/>
