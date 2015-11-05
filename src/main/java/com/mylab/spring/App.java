@@ -1,3 +1,5 @@
+package com.mylab.spring;
+
 public class App {
 
     private Client client;

@@ -1,3 +1,5 @@
+package com.mylab.spring;
+
 /**
  * Created by lilie0-ASUS on 10/27/2015.
  */
