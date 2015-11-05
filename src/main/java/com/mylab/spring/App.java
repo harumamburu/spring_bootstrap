@@ -1,5 +1,9 @@
 package com.mylab.spring;
 
+import com.mylab.spring.client.Client;
+import com.mylab.spring.logging.ConsoleEventLogger;
+import com.mylab.spring.logging.EventLogger;
+
 public class App {
 
     private Client client;

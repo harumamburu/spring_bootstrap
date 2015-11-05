@@ -1,4 +1,4 @@
-package com.mylab.spring;
+package com.mylab.spring.client;
 
 /**
  * Created by lilie0-ASUS on 10/27/2015.

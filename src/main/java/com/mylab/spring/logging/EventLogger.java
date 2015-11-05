@@ -1,4 +1,4 @@
-package com.mylab.spring;
+package com.mylab.spring.logging;
 
 public interface EventLogger {
 
