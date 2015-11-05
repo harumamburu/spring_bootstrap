@@ -15,6 +15,10 @@
         <constructor-arg>
             <bean class="java.util.Date"/>
         </constructor-arg>
+        <constructor-arg>
+            <bean class="java.text.DateFormat"
+                  factory-method="getDateTimeInstance"/>
+        </constructor-arg>
     </bean>
 
     <bean id="app" class="com.mylab.spring.App">
