@@ -19,16 +19,16 @@ public class Event {
         id = RANDOMIZER.nextInt(Integer.MAX_VALUE);
     }
 
-    public String getEvent() {
+    public String getStringEvent() {
         return event;
     }
 
-    public void setEvent(String event) {
+    public void setStringEvent(String event) {
         this.event = event;
     }
 
     @Override
     public String toString() {
-        return String.format("Event # %d:%s occurred %s", id, event, dateFormat.format(creationDate));
+        return String.format("Event #%d: %s occurred %s", id, event, dateFormat.format(creationDate));
     }
 }

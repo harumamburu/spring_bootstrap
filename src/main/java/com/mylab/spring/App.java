@@ -1,7 +1,7 @@
 package com.mylab.spring;
 
 import com.mylab.spring.client.Client;
-import com.mylab.spring.logging.ConsoleEventLogger;
+import com.mylab.spring.event.Event;
 import com.mylab.spring.logging.EventLogger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -21,12 +21,15 @@ public class App {
 
         App app = appContext.getBean("app", App.class);
 
-        app.logEvent("Event for user 1");
-        app.logEvent("Event for user 2");
+        Event event = appContext.getBean("event", Event.class);
+        event.setStringEvent("Event for user 1");
+
+        app.logEvent(event);
+        //app.logEvent("Event for user 2");
     }
 
-    private void logEvent(String event) {
-        String message = event.replaceAll(String.valueOf(client.getId()), client.getFullName());
-        eventLogger.logEvent(message);
+    private void logEvent(Event event) {
+        event.setStringEvent(event.getStringEvent().replaceAll(String.valueOf(client.getId()), client.getFullName()));
+        eventLogger.logEvent(event);
     }
 }
