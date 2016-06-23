@@ -22,10 +22,10 @@ public class App {
         App app = appContext.getBean("app", App.class);
 
         Event event = appContext.getBean("event", Event.class);
-        event.setStringEvent("Event for user 1");
+        event.setStringEvent("Event for user " + app.client.getId());
 
         app.logEvent(event);
-        //app.logEvent("Event for user 2");
+
     }
 
     private void logEvent(Event event) {
