@@ -15,6 +15,10 @@
         <constructor-arg index="0" value="application.log"/>
         <constructor-arg index="1" value="UTF-8"/>
     </bean>
+    <bean id="cachedLogger" class="com.mylab.spring.logging.CacheEventLogger"
+          destroy-method="destroy" parent="fileLogger">
+        <constructor-arg index="2" value="10"/>
+    </bean>
 
     <bean id="app" class="com.mylab.spring.App">
         <constructor-arg ref="client"/>

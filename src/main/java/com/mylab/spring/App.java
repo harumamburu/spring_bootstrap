@@ -3,7 +3,7 @@ package com.mylab.spring;
 import com.mylab.spring.client.Client;
 import com.mylab.spring.event.Event;
 import com.mylab.spring.logging.EventLogger;
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class App {
@@ -17,15 +17,15 @@ public class App {
     }
 
     public static void main(String[] args) {
-        ApplicationContext appContext = new ClassPathXmlApplicationContext("spring-config.xml");
+        ConfigurableApplicationContext appContext = new ClassPathXmlApplicationContext("spring-config.xml");
 
         App app = appContext.getBean("app", App.class);
 
         Event event = appContext.getBean("event", Event.class);
         event.setStringEvent("Event for user " + app.client.getId());
-
         app.logEvent(event);
 
+        appContext.close();
     }
 
     private void logEvent(Event event) {
