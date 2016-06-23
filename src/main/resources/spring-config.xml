@@ -3,13 +3,23 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+
     <bean id="client" class="com.mylab.spring.client.Client">
         <!-- constructor bean injection -->
         <constructor-arg value="1" index="0"/><!--type="java.lang.Long" name="id" -->
         <constructor-arg value="J. Doe" index="1"/>
     </bean>
 
-    <bean id="eventLogger" class="com.mylab.spring.logging.ConsoleEventLogger"/>
+    <bean id="consoleLogger" class="com.mylab.spring.logging.ConsoleEventLogger"/>
+    <bean id="fileLogger" class="com.mylab.spring.logging.FileEventLogger" init-method="init">
+        <constructor-arg index="0" value="application.log"/>
+        <constructor-arg index="1" value="UTF-8"/>
+    </bean>
+
+    <bean id="app" class="com.mylab.spring.App">
+        <constructor-arg ref="client"/>
+        <constructor-arg ref="fileLogger"/>
+    </bean>
 
     <bean id="event" class="com.mylab.spring.event.Event" scope="prototype">
         <constructor-arg>
@@ -19,10 +29,5 @@
             <bean class="java.text.DateFormat"
                   factory-method="getDateTimeInstance"/>
         </constructor-arg>
-    </bean>
-
-    <bean id="app" class="com.mylab.spring.App">
-        <constructor-arg ref="client"/>
-        <constructor-arg ref="eventLogger"/>
     </bean>
 </beans>
