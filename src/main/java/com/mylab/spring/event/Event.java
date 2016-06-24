@@ -2,6 +2,7 @@ package com.mylab.spring.event;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.Optional;
 import java.util.Random;
 
 public class Event {
@@ -12,6 +13,7 @@ public class Event {
     private final Date creationDate;
     private final DateFormat dateFormat;
     private String event;
+    private Optional<EventType> type = Optional.empty();
 
     public Event(Date creationDate, DateFormat dateFormat) {
         this.creationDate = creationDate;
@@ -27,8 +29,18 @@ public class Event {
         this.event = event;
     }
 
+    public EventType getType() {
+        return type.orElse(null);
+    }
+
+    public void setType(EventType type) {
+        this.type = Optional.of(type);
+    }
+
     @Override
     public String toString() {
-        return String.format("Event #%d: %s occurred %s", id, event, dateFormat.format(creationDate));
+        return String.format("%s: Event #%d {%s} occurred %s",
+                type.map(t -> t.name()).orElse("N/A"),
+                id, event, dateFormat.format(creationDate));
     }
 }
