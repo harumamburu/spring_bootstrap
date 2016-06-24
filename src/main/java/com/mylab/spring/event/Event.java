@@ -39,8 +39,8 @@ public class Event {
 
     @Override
     public String toString() {
-        return String.format("%s: Event #%d {%s} occurred %s",
-                type.map(t -> t.name()).orElse("N/A"),
+        return String.format("%s: #%d {%s} occurred %s",
+                type.map(t -> t.name()).orElse("Event"),
                 id, event, dateFormat.format(creationDate));
     }
 }
