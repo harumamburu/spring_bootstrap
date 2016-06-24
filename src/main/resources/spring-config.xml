@@ -4,25 +4,17 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 
+    <import resource="loggers.xml"/>
+    
     <bean id="client" class="com.mylab.spring.client.Client">
         <!-- constructor bean injection -->
         <constructor-arg value="1" index="0"/><!--type="java.lang.Long" name="id" -->
         <constructor-arg value="J. Doe" index="1"/>
     </bean>
 
-    <bean id="consoleLogger" class="com.mylab.spring.logging.ConsoleEventLogger"/>
-    <bean id="fileLogger" class="com.mylab.spring.logging.FileEventLogger" init-method="init">
-        <constructor-arg index="0" value="application.log"/>
-        <constructor-arg index="1" value="UTF-8"/>
-    </bean>
-    <bean id="cachedLogger" class="com.mylab.spring.logging.CacheEventLogger"
-          destroy-method="destroy" parent="fileLogger">
-        <constructor-arg index="2" value="10"/>
-    </bean>
-
     <bean id="app" class="com.mylab.spring.App">
         <constructor-arg ref="client"/>
-        <constructor-arg ref="fileLogger"/>
+        <constructor-arg ref="fileLogger"/><!--from loggers-->
     </bean>
 
     <bean id="event" class="com.mylab.spring.event.Event" scope="prototype" lazy-init="true">
