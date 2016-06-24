@@ -10,6 +10,7 @@
         <!-- constructor bean injection -->
         <constructor-arg value="1" index="0"/><!--type="java.lang.Long" name="id" -->
         <constructor-arg value="J. Doe" index="1"/>
+        <property name="greeting" value="Hi!"/>
     </bean>
 
     <bean id="app" class="com.mylab.spring.App">
