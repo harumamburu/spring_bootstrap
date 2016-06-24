@@ -1,17 +1,16 @@
 <?xml version="1.0"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:p="http://www.springframework.org/schema/p"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 
     <import resource="loggers.xml"/>
-    
-    <bean id="client" class="com.mylab.spring.client.Client">
-        <!-- constructor bean injection -->
-        <constructor-arg value="1" index="0"/><!--type="java.lang.Long" name="id" -->
-        <constructor-arg value="J. Doe" index="1"/>
-        <property name="greeting" value="Hi!"/>
-    </bean>
+    <import resource="properties.xml"/>
+
+    <bean id="client" class="com.mylab.spring.client.Client"
+          c:id="${client.id}" c:fullName="${client.name}" p:greeting="${client.greeting}"/>
 
     <bean id="app" class="com.mylab.spring.App">
         <constructor-arg ref="client"/>
@@ -28,6 +27,7 @@
     </bean>
 
     <bean id="event" class="com.mylab.spring.event.Event" scope="prototype" lazy-init="true">
+        <!-- constructor bean injection -->
         <constructor-arg>
             <bean class="java.util.Date"/>
             <!--creates an instance of Date as a bean-->
@@ -39,4 +39,5 @@
         </constructor-arg>
         <property name="type" value="INFO"/>
     </bean>
+
 </beans>
