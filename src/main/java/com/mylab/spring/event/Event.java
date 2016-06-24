@@ -13,7 +13,7 @@ public class Event {
     private final Date creationDate;
     private final DateFormat dateFormat;
     private String event;
-    private Optional<EventType> type = Optional.empty();
+    private EventType type;
 
     public Event(Date creationDate, DateFormat dateFormat) {
         this.creationDate = creationDate;
@@ -30,17 +30,17 @@ public class Event {
     }
 
     public EventType getType() {
-        return type.orElse(null);
+        return type;
     }
 
     public void setType(EventType type) {
-        this.type = Optional.of(type);
+        this.type = type;
     }
 
     @Override
     public String toString() {
         return String.format("%s: #%d {%s} occurred %s",
-                type.map(t -> t.name()).orElse("Event"),
+                Optional.ofNullable(type).map(Enum::name).orElse("Event"),
                 id, event, dateFormat.format(creationDate));
     }
 }
