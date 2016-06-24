@@ -25,7 +25,6 @@
             <set>
                 <ref bean="consoleLogger"/>
                 <ref bean="fileLogger"/>
-                <ref bean="cachedLogger"/>
             </set>
         </constructor-arg>
     </bean>
