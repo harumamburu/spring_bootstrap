@@ -17,4 +17,14 @@
         <constructor-arg index="2" value="10"/>
     </bean>
 
+    <bean id="combinedLogger" class="com.mylab.spring.logging.CombinedEventLogger">
+        <constructor-arg>
+            <set>
+                <ref bean="consoleLogger"/>
+                <ref bean="fileLogger"/>
+                <ref bean="cachedLogger"/>
+            </set>
+        </constructor-arg>
+    </bean>
+
 </beans>
