@@ -2,18 +2,21 @@ package com.mylab.spring;
 
 import com.mylab.spring.client.Client;
 import com.mylab.spring.event.Event;
+import com.mylab.spring.event.EventType;
 import com.mylab.spring.logging.EventLogger;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.util.Map;
+
 public class App {
 
     private Client client;
-    private EventLogger eventLogger;
+    private Map<EventType, EventLogger> loggers;
 
-    private App(Client client, EventLogger logger) {
+    private App(Client client, Map<EventType, EventLogger> loggers) {
         this.client = client;
-        this.eventLogger = logger;
+        this.loggers = loggers;
     }
 
     public static void main(String[] args) {
@@ -30,6 +33,6 @@ public class App {
 
     private void logEvent(Event event) {
         event.setStringEvent(event.getStringEvent().replaceAll(String.valueOf(client.getId()), client.getFullName()));
-        eventLogger.logEvent(event);
+        loggers.get(event.getType()).logEvent(event);
     }
 }
