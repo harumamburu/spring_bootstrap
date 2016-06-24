@@ -25,13 +25,15 @@
         <constructor-arg ref="fileLogger"/>
     </bean>
 
-    <bean id="event" class="com.mylab.spring.event.Event" scope="prototype">
+    <bean id="event" class="com.mylab.spring.event.Event" scope="prototype" lazy-init="true">
         <constructor-arg>
             <bean class="java.util.Date"/>
+            <!--creates an instance of Date as a bean-->
         </constructor-arg>
         <constructor-arg>
             <bean class="java.text.DateFormat"
                   factory-method="getDateTimeInstance"/>
+            <!--creates an instance of Format from an abstract class' static method-->
         </constructor-arg>
     </bean>
 </beans>
