@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Configuration
@@ -23,5 +25,11 @@ public class LoggingBeansConfig {
         loggers.put(EventType.ERROR, combinedLogger);
         loggers.put(null, cacheLogger);
         return loggers;
+    }
+
+    @Bean
+    public List<EventLogger> combinedLogger(@Qualifier("consoleLogger")EventLogger consoleLogger,
+                                            @Qualifier("fileLogger")EventLogger fileLogger) {
+        return Arrays.asList(consoleLogger, fileLogger);
     }
 }
