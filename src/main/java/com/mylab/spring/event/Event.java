@@ -1,10 +1,15 @@
 package com.mylab.spring.event;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Optional;
 import java.util.Random;
 
+@Component("event")
+@Scope("prototype")
 public class Event {
 
     private static final Random RANDOMIZER = new Random();

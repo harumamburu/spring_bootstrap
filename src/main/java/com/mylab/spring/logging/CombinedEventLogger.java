@@ -1,9 +1,11 @@
 package com.mylab.spring.logging;
 
 import com.mylab.spring.event.Event;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component("combinedLogger")
 public class CombinedEventLogger implements EventLogger {
 
     private List<EventLogger> loggers;

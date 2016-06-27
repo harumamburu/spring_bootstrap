@@ -1,10 +1,13 @@
 package com.mylab.spring.logging;
 
 import com.mylab.spring.event.Event;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PreDestroy;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component("cachedLogger")
 public class CacheEventLogger extends FileEventLogger {
 
     private int cacheSize;
@@ -29,6 +32,7 @@ public class CacheEventLogger extends FileEventLogger {
         cache.clear();
     }
 
+    @PreDestroy
     private void destroy() {
         if (!cache.isEmpty()) {
             dumpCache();

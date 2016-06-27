@@ -6,9 +6,11 @@ import com.mylab.spring.event.EventType;
 import com.mylab.spring.logging.EventLogger;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+@Component("app")
 public class App {
 
     private Client client;

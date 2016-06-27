@@ -1,5 +1,8 @@
 package com.mylab.spring.client;
 
+import org.springframework.stereotype.Component;
+
+@Component("client")
 public class Client {
 
     private Long id;

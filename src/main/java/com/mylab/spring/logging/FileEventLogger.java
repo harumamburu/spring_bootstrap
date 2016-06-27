@@ -2,10 +2,13 @@ package com.mylab.spring.logging;
 
 import com.mylab.spring.event.Event;
 import org.apache.commons.io.FileUtils;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 
+@Component("fileLogger")
 public class FileEventLogger implements EventLogger {
 
     protected String filename;
@@ -28,6 +31,7 @@ public class FileEventLogger implements EventLogger {
         }
     }
 
+    @PostConstruct
     protected void init() throws IOException {
         logFile = new File(filename);
         if (!logFile.exists()) {
