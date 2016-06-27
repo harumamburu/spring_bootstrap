@@ -4,6 +4,7 @@ import com.mylab.spring.client.Client;
 import com.mylab.spring.event.Event;
 import com.mylab.spring.event.EventType;
 import com.mylab.spring.logging.EventLogger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ public class App {
     private Client client;
     private Map<EventType, EventLogger> loggers;
 
+    @Autowired
     private App(Client client, Map<EventType, EventLogger> loggers) {
         this.client = client;
         this.loggers = loggers;
