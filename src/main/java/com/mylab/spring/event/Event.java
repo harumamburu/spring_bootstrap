@@ -1,8 +1,11 @@
 package com.mylab.spring.event;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Optional;
@@ -20,7 +23,8 @@ public class Event {
     private String event;
     private EventType type;
 
-    public Event(Date creationDate, DateFormat dateFormat) {
+    @Autowired
+    public Event(Date creationDate, @Qualifier("dateTime")DateFormat dateFormat) {
         this.creationDate = creationDate;
         this.dateFormat = dateFormat;
         id = RANDOMIZER.nextInt(Integer.MAX_VALUE);
