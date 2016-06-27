@@ -2,6 +2,7 @@ package com.mylab.spring.logging;
 
 import com.mylab.spring.event.Event;
 import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +19,7 @@ public class FileEventLogger implements EventLogger {
 
     final String newLine = System.getProperty("line.separator");
 
+    @Autowired
     public FileEventLogger(@Value("${logging.logfile}") String filename, @Value("${logging.encoding}")String encoding) {
         this.filename = filename;
         this.encoding = encoding;

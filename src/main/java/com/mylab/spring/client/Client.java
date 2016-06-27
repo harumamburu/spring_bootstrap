@@ -1,5 +1,6 @@
 package com.mylab.spring.client;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +11,8 @@ public class Client {
     private String fullName;
     private String greeting;
 
-    public Client(Long id, String fullName) {
+    @Autowired
+    public Client(@Value("${client.id}")Long id, @Value("${client.name}")String fullName) {
         this.id = id;
         this.fullName = fullName;
     }
@@ -19,7 +21,6 @@ public class Client {
         return id;
     }
 
-    @Value("${client.id}")
     public void setId(Long id) {
         this.id = id;
     }
@@ -28,7 +29,6 @@ public class Client {
         return fullName;
     }
 
-    @Value("${client.name}")
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
