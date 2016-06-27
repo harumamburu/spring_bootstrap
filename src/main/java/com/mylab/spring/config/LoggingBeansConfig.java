@@ -15,7 +15,7 @@ import java.util.Map;
 @Configuration
 public class LoggingBeansConfig {
 
-    @Bean
+    @Bean(name = "loggersMap")
     @Autowired
     public Map<EventType, EventLogger> loggers(@Qualifier("consoleLogger")EventLogger consoleLogger,
                                                @Qualifier("cachedLogger")EventLogger cacheLogger,
