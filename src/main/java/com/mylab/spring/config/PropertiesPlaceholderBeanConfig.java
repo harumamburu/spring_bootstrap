@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
 @Configuration
-public class PropertiesPlaceholderConfig {
+public class PropertiesPlaceholderBeanConfig {
 
     @Bean
     public PropertyPlaceholderConfigurer properties() {
