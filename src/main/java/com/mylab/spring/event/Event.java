@@ -2,6 +2,7 @@ package com.mylab.spring.event;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -44,6 +45,7 @@ public class Event {
         return type;
     }
 
+    @Value("INFO")
     public void setType(EventType type) {
         this.type = type;
     }
