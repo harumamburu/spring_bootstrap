@@ -1,6 +1,7 @@
 package com.mylab.spring.logging;
 
 import com.mylab.spring.event.Event;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
@@ -13,7 +14,9 @@ public class CacheEventLogger extends FileEventLogger {
     private int cacheSize;
     private List<Event> cache;
 
-    public CacheEventLogger(String filename, String encoding, int cacheSize) {
+    public CacheEventLogger(@Value("${logging.logfile}") String filename,
+                            @Value("${logging.encoding}")String encoding,
+                            @Value("${logging.cache.size}")int cacheSize) {
         super(filename, encoding);
         this.cacheSize = cacheSize;
         cache = new ArrayList<>(cacheSize);
