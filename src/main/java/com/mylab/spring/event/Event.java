@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.Random;
 
-@Component("event")
+@Component
 @Scope("prototype")
 @Lazy
 public class Event {
@@ -27,7 +27,7 @@ public class Event {
     private EventType type;
 
     @Autowired
-    public Event(Date creationDate, @Qualifier("dateTime")DateFormat dateFormat) {
+    public Event(Date creationDate, DateFormat dateFormat) {
         this.creationDate = creationDate;
         this.dateFormat = dateFormat;
         id = RANDOMIZER.nextInt(Integer.MAX_VALUE);

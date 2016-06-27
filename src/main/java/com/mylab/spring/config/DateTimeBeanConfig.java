@@ -9,7 +9,7 @@ import java.util.Date;
 @Configuration
 public class DateTimeBeanConfig {
 
-    @Bean(name = "dateTime")
+    @Bean
     public DateFormat dateformat() {
         return DateFormat.getDateTimeInstance();
     }

@@ -14,12 +14,12 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.util.Map;
 
-@Component("app")
+@Component
 public class App {
 
     @Autowired
     private Client client;
-    @Resource(name = "loggersMap")
+    @Resource
     private Map<EventType, EventLogger> loggers;
 
     private App() {}
