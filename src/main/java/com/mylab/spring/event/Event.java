@@ -2,6 +2,7 @@ package com.mylab.spring.event;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,7 @@ import java.util.Random;
 
 @Component("event")
 @Scope("prototype")
+@Lazy
 public class Event {
 
     private static final Random RANDOMIZER = new Random();
