@@ -11,8 +11,8 @@ import java.util.Map;
 
 public class App {
 
-    private Client client;
-    private Map<EventType, EventLogger> loggers;
+    private final Client client;
+    private final Map<EventType, EventLogger> loggers;
 
     private App(Client client, Map<EventType, EventLogger> loggers) {
         this.client = client;

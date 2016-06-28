@@ -4,24 +4,34 @@ import com.mylab.spring.event.Event;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 
-@Component("fileLogger")
 public class FileEventLogger implements EventLogger {
 
     protected String filename;
-    protected File logFile;
     protected String encoding;
+    protected File logFile;
 
-    final String newLine = System.getProperty("line.separator");
+    private final String newLine = System.getProperty("line.separator");
+
+    public String getFilename() {
+        return filename;
+    }
 
     @Autowired
-    public FileEventLogger(@Value("${logging.logfile}") String filename, @Value("${logging.encoding}")String encoding) {
+    public void setFilename(@Value("${logging.logfile}")String filename) {
         this.filename = filename;
+    }
+
+    public String getEncoding() {
+        return encoding;
+    }
+
+    @Autowired
+    public void setEncoding(@Value("${logging.encoding}")String encoding) {
         this.encoding = encoding;
     }
 

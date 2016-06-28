@@ -3,25 +3,22 @@ package com.mylab.spring.logging;
 import com.mylab.spring.event.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
-import java.util.ArrayList;
 import java.util.List;
 
-@Component("cachedLogger")
 public class CacheEventLogger extends FileEventLogger {
 
     private int cacheSize;
     private List<Event> cache;
 
+    public int getCacheSize() {
+        return cacheSize;
+    }
+
     @Autowired
-    public CacheEventLogger(@Value("${logging.logfile}") String filename,
-                            @Value("${logging.encoding}")String encoding,
-                            @Value("${logging.cache.size}")int cacheSize) {
-        super(filename, encoding);
+    public void setCacheSize(@Value("${logging.cache.size}")int cacheSize) {
         this.cacheSize = cacheSize;
-        cache = new ArrayList<>(cacheSize);
     }
 
     @Override

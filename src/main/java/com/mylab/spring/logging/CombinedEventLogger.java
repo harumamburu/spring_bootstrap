@@ -6,7 +6,7 @@ import java.util.List;
 
 public class CombinedEventLogger implements EventLogger {
 
-    private List<EventLogger> loggers;
+    private final List<EventLogger> loggers;
 
     public CombinedEventLogger(List<EventLogger> loggers) {
         this.loggers = loggers;
