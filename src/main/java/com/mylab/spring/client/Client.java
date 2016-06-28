@@ -14,7 +14,7 @@ public class Client {
     }
 
     @Autowired
-    public void setId(@Value("${client.id}")Long id) {
+    public void setId(@Value("${client.id:#{new java.util.Random().nextInt(T(java.lang.Integer).MAX_VALUE) + 1}}")Long id) {
         this.id = id;
     }
 
@@ -23,7 +23,9 @@ public class Client {
     }
 
     @Autowired
-    public void setFullName(@Value("${client.name}")String fullName) {
+    public void setFullName(@Value("${client.name:" +
+            "#{T(java.lang.System).getProperty('os.name').startsWith('Windows')" +
+            "? systemEnvironment['USERNAME'] : systemEnvironment['USER']}}")String fullName) {
         this.fullName = fullName;
     }
 
@@ -32,7 +34,7 @@ public class Client {
     }
 
     @Autowired
-    public void setGreeting(@Value("${client.greeting}")String greeting) {
+    public void setGreeting(@Value("${client.greeting:#{'Hello'}}")String greeting) {
         this.greeting = greeting;
     }
 }
