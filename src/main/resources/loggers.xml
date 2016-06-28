@@ -32,7 +32,10 @@
         <entry key="ERROR" value-ref="combinedLogger"/>
         <entry>
             <key><null/></key>
-            <ref bean="cachedLogger"/>
+            <ref bean="#{T(java.util.Calendar).getInstance().get(T(java.util.Calendar).HOUR_OF_DAY) gt 8
+                        and T(java.util.Calendar).getInstance().get(T(java.util.Calendar).HOUR_OF_DAY) lt 17
+                        ? 'cachedLogger'
+                        : 'consoleLogger'}"/>
         </entry>
     </util:map>
 
