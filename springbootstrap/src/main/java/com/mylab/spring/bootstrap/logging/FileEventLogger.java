@@ -1,6 +1,6 @@
-package com.mylab.spring.logging;
+package com.mylab.spring.bootstrap.logging;
 
-import com.mylab.spring.event.Event;
+import com.mylab.spring.bootstrap.event.Event;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

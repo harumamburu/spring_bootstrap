@@ -1,6 +1,6 @@
-package com.mylab.spring.logging;
+package com.mylab.spring.bootstrap.logging;
 
-import com.mylab.spring.event.Event;
+import com.mylab.spring.bootstrap.event.Event;
 
 import javax.annotation.PreDestroy;
 import java.util.ArrayList;

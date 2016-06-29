@@ -1,4 +1,4 @@
-package com.mylab.spring.client;
+package com.mylab.spring.bootstrap.client;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

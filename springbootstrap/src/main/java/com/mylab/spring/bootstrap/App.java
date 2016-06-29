@@ -1,9 +1,9 @@
-package com.mylab.spring;
+package com.mylab.spring.bootstrap;
 
-import com.mylab.spring.client.Client;
-import com.mylab.spring.event.Event;
-import com.mylab.spring.event.EventType;
-import com.mylab.spring.logging.EventLogger;
+import com.mylab.spring.bootstrap.client.Client;
+import com.mylab.spring.bootstrap.event.Event;
+import com.mylab.spring.bootstrap.event.EventType;
+import com.mylab.spring.bootstrap.logging.EventLogger;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 

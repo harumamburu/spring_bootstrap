@@ -11,14 +11,14 @@
 
     <import resource="properties.xml"/>
 
-    <bean id="consoleLogger" class="com.mylab.spring.logging.ConsoleEventLogger"/>
+    <bean id="consoleLogger" class="com.mylab.spring.bootstrap.logging.ConsoleEventLogger"/>
 
-    <bean id="fileLogger" class="com.mylab.spring.logging.FileEventLogger"/>
+    <bean id="fileLogger" class="com.mylab.spring.bootstrap.logging.FileEventLogger"/>
 
-    <bean id="cachedLogger" class="com.mylab.spring.logging.CacheEventLogger"
+    <bean id="cachedLogger" class="com.mylab.spring.bootstrap.logging.CacheEventLogger"
           c:cacheSize="${logging.cache.size}"/>
 
-    <bean id="combinedLogger" class="com.mylab.spring.logging.CombinedEventLogger">
+    <bean id="combinedLogger" class="com.mylab.spring.bootstrap.logging.CombinedEventLogger">
         <constructor-arg>
             <set>
                 <ref bean="consoleLogger"/>

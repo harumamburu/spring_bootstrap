@@ -1,4 +1,4 @@
-package com.mylab.spring.event;
+package com.mylab.spring.bootstrap.event;
 
 import java.text.DateFormat;
 import java.util.Date;

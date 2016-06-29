@@ -1,4 +1,4 @@
-package com.mylab.spring.event;
+package com.mylab.spring.bootstrap.event;
 
 public enum EventType {
     ERROR,
