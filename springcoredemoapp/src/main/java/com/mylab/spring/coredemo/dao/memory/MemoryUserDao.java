@@ -1,13 +1,14 @@
 package com.mylab.spring.coredemo.dao.memory;
 
 import com.mylab.spring.coredemo.dao.NamingDao;
+import com.mylab.spring.coredemo.dao.UserDao;
 import com.mylab.spring.coredemo.entity.User;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class MemoryUserDao implements NamingDao<User> {
+public class MemoryUserDao implements UserDao {
 
     private final static AtomicLong COUNTER = new AtomicLong();
     private final Map<Long, User> USERS = new ConcurrentHashMap<>(4, 0.9f, 1);
@@ -32,4 +33,7 @@ public class MemoryUserDao implements NamingDao<User> {
         return null;
     }
 
+    public User getUserByEmail(String email) {
+        return null;
+    }
 }

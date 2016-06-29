@@ -1,6 +1,6 @@
 package com.mylab.spring.coredemo.test.dao;
 
-import com.mylab.spring.coredemo.dao.NamingDao;
+import com.mylab.spring.coredemo.dao.UserDao;
 import com.mylab.spring.coredemo.dao.exception.EntityAlreadyExistsException;
 import com.mylab.spring.coredemo.dao.exception.EntityNotFoundException;
 import com.mylab.spring.coredemo.entity.User;
@@ -14,7 +14,7 @@ public class UserDaoTest {
     @Autowired
     @Qualifier("userMemoryDao")
     private User user;
-    private NamingDao<User> userDao;
+    private UserDao userDao;
     
     @Test(groups = "saveTests")
     public void testSaveUser() {
@@ -40,7 +40,7 @@ public class UserDaoTest {
             groups = "gettersTests",
             priority = 1)
     public void testGetUserByEmail() {
-        Assert.assertEquals(userDao.getByEmail(user.getEmail()), user, "Failed to get user by Email");
+        Assert.assertEquals(userDao.getUserByEmail(user.getEmail()), user, "Failed to get user by Email");
     }
 
     @Test(dependsOnMethods = "testSaveUser",
@@ -84,7 +84,7 @@ public class UserDaoTest {
             priority = 2,
             expectedExceptions = EntityNotFoundException.class)
     public void testNegativeGetUserByEmail() {
-        userDao.getEntityByEmail("");
+        userDao.getUserByEmail("");
     }
 
     @Test(dependsOnGroups = "gettersTests", priority = 3)
