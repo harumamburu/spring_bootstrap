@@ -1,104 +1,103 @@
 package com.mylab.spring.coredemo.test.dao;
 
+import com.mylab.spring.coredemo.dao.Dao;
 import com.mylab.spring.coredemo.dao.UserDao;
 import com.mylab.spring.coredemo.dao.exception.DaoException;
 import com.mylab.spring.coredemo.dao.exception.EntityAlreadyExistsException;
 import com.mylab.spring.coredemo.dao.exception.EntityNotFoundException;
 import com.mylab.spring.coredemo.entity.User;
-import com.mylab.spring.coredemo.test.BaseTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Assert;
-import org.testng.Assert.ThrowingRunnable;
 import org.testng.annotations.Test;
 
 import javax.annotation.Resource;
 
-public class UserDaoTest extends BaseTest {
+public class UserDaoTest extends AbstractDaoTest<User, UserDao> {
 
-    @Autowired
-    private User user;
+    @Override
     @Resource(name = "userMemoryDao")
-    private UserDao userDao;
-    
-    @Test(groups = "saveTests")
-    public void saveUser() throws DaoException {
-        user = userDao.saveEntity(user);
-        Assert.assertNotNull(user, "User wasn't saved");
-        Assert.assertNotNull(user.getId(), "Id Haven't been set");
+    protected void setDao(UserDao userDao) {
+        dao = userDao;
     }
-    
-    @Test(dependsOnMethods = "saveUser",
+
+    @Override
+    @Autowired
+    protected void setEntity(User user) {
+        entity = user;
+    }
+
+    @Test(dependsOnMethods = "saveEntity",
             groups = "gettersTests",
             priority = 1)
     public void getUserById() throws DaoException {
-        Assert.assertEquals(userDao.getEntityById(user.getId()), user, "Failed to get user by Id");
+        Assert.assertEquals(dao.getEntityById(entity.getId()), entity, "Failed to get user by Id");
     }
 
-    @Test(dependsOnMethods = "saveUser",
+    @Test(dependsOnMethods = "saveEntity",
             groups = "gettersTests",
             priority = 1)
     public void getUserByName() throws DaoException  {
-        Assert.assertEquals(userDao.getEntityByName(user.getName()), user, "Failed to get user by name");
+        Assert.assertEquals(((UserDao) dao).getEntityByName(entity.getName()), entity, "Failed to get user by name");
     }
 
-    @Test(dependsOnMethods = "saveUser",
+    @Test(dependsOnMethods = "saveEntity",
             groups = "gettersTests",
             priority = 1)
     public void getUserByEmail() throws DaoException  {
-        Assert.assertEquals(userDao.getUserByEmail(user.getEmail()), user, "Failed to get user by Email");
+        Assert.assertEquals(((UserDao) dao).getUserByEmail(entity.getEmail()), entity, "Failed to get user by Email");
     }
 
-    @Test(dependsOnMethods = "saveUser",
+    @Test(dependsOnMethods = "saveEntity",
             groups = {"negativeTests", "saveTests"},
             priority = 2,
             expectedExceptions = EntityAlreadyExistsException.class)
     public void saveUserWithUniqueNameViolated() throws DaoException {
-        User newUser = copyUser(user);
-        newUser.setName("New" + user.getName());
-        userDao.saveEntity(user);
+        User newUser = copyUser(entity);
+        newUser.setName("New" + entity.getName());
+        dao.saveEntity(entity);
     }
 
-    @Test(dependsOnMethods = "saveUser",
+    @Test(dependsOnMethods = "saveEntity",
             groups = {"negativeTests", "saveTests"},
             priority = 2,
             expectedExceptions = EntityAlreadyExistsException.class)
     public void saveUserWithUniqueEmailViolated() throws DaoException {
-        User newUser = copyUser(user);
-        newUser.setEmail("New" + user.getEmail());
-        userDao.saveEntity(user);
+        User newUser = copyUser(entity);
+        newUser.setEmail("New" + entity.getEmail());
+        dao.saveEntity(entity);
     }
 
-    @Test(dependsOnMethods = "saveUser",
+    @Test(dependsOnMethods = "saveEntity",
             groups = {"negativeTests", "gettersTests"},
             priority = 2,
             expectedExceptions = EntityNotFoundException.class)
     public void getNonExistingUserById() throws DaoException {
-        userDao.getEntityById(Long.MAX_VALUE);
+        dao.getEntityById(Long.MAX_VALUE);
     }
 
-    @Test(dependsOnMethods = "saveUser",
+    @Test(dependsOnMethods = "saveEntity",
             groups = {"negativeTests", "gettersTests"},
             priority = 2,
             expectedExceptions = EntityNotFoundException.class)
     public void getNonExistingUserByName() throws DaoException {
-        userDao.getEntityByName("");
+        ((UserDao) dao).getEntityByName("");
     }
 
-    @Test(dependsOnMethods = "saveUser",
+    @Test(dependsOnMethods = "saveEntity",
             groups = {"negativeTests", "gettersTests"},
             priority = 2,
             expectedExceptions = EntityNotFoundException.class)
     public void getNonExistingUserByEmail() throws DaoException {
-        userDao.getUserByEmail("");
+        ((UserDao) dao).getUserByEmail("");
     }
 
     @Test(dependsOnGroups = "gettersTests",
             groups = {"deletingTests", "negativeTests"},
             priority = 3)
     public void deleteNonExistingUser() throws DaoException {
-        User newUser = copyUser(user);
+        User newUser = copyUser(entity);
         newUser.setId(Long.MAX_VALUE);
-        Assert.assertNull(userDao.removeEntity(newUser), "Null should have been returned");
+        Assert.assertNull(dao.removeEntity(newUser), "Null should have been returned");
     }
 
     @Test(dependsOnGroups = "gettersTests",
@@ -106,14 +105,7 @@ public class UserDaoTest extends BaseTest {
             priority = 3,
             expectedExceptions = DaoException.class)
     public void deleteUserWithNullId() throws DaoException {
-        userDao.removeEntity(copyUser(user));
-    }
-
-    @Test(dependsOnGroups = "deletingTests",
-            priority = 4)
-    public void deleteUser() throws DaoException {
-        userDao.removeEntity(user);
-        Assert.assertThrows(EntityNotFoundException.class, () -> userDao.getEntityById(user.getId()));
+        dao.removeEntity(copyUser(entity));
     }
 
     private User copyUser(User oldUser) {
