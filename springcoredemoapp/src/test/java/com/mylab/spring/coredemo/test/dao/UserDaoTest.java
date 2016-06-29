@@ -1,5 +1,6 @@
 package com.mylab.spring.coredemo.test.dao;
 
+import com.mylab.spring.coredemo.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.testng.Assert;
