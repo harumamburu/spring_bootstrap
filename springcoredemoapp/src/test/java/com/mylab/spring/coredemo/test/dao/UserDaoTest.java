@@ -1,5 +1,7 @@
 package com.mylab.spring.coredemo.test.dao;
 
+import com.mylab.spring.coredemo.dao.exception.EntityAlreadyExistsException;
+import com.mylab.spring.coredemo.dao.exception.EntityNotFoundException;
 import com.mylab.spring.coredemo.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,7 +17,7 @@ public class UserDaoTest {
     
     @Test(groups = "saveTests")
     public void testSaveUser() {
-        user = userDao.save(user);
+        user = userDao.saveEntity(user);
         Assert.assertNotNull(user.getId(), "Id Haven't been set");
     }
     
@@ -43,7 +45,7 @@ public class UserDaoTest {
     @Test(dependsOnMethods = "testSaveUser",
             groups = {"negativeTests", "saveTests"},
             priority = 2,
-            expectedExceptions = AlreadyExistsException.class)
+            expectedExceptions = EntityAlreadyExistsException.class)
     public void testNegativeSaveUserWithName() {
         User newUser = copyUser(user);
         newUser.setName("New" + user.getName());
@@ -53,7 +55,7 @@ public class UserDaoTest {
     @Test(dependsOnMethods = "testSaveUser",
             groups = {"negativeTests", "saveTests"},
             priority = 2,
-            expectedExceptions = AlreadyExistsException.class)
+            expectedExceptions = EntityAlreadyExistsException.class)
     public void testNegativeSaveUserWithEmail() {
         User newUser = copyUser(user);
         newUser.setEmail("New" + user.getEmail());
@@ -86,7 +88,7 @@ public class UserDaoTest {
 
     @Test(dependsOnGroups = "gettersTests", priority = 3)
     public void deleteUserTest() {
-        user = userDao.delete(user);
+        user = userDao.removeEntity(user);
         Assert.assertNull(userDao.getById(user.getId()), "Deleted user is still in the storage");
     }
 
