@@ -4,21 +4,24 @@ import com.mylab.spring.coredemo.dao.UserDao;
 import com.mylab.spring.coredemo.dao.exception.EntityAlreadyExistsException;
 import com.mylab.spring.coredemo.dao.exception.EntityNotFoundException;
 import com.mylab.spring.coredemo.entity.User;
+import com.mylab.spring.coredemo.test.BaseTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class UserDaoTest {
+import javax.annotation.Resource;
+
+public class UserDaoTest extends BaseTest {
 
     @Autowired
-    @Qualifier("userMemoryDao")
     private User user;
+    @Resource(name = "userMemoryDao")
     private UserDao userDao;
     
     @Test(groups = "saveTests")
     public void testSaveUser() {
         user = userDao.saveEntity(user);
+        Assert.assertNotNull(user, "User wasn't saved");
         Assert.assertNotNull(user.getId(), "Id Haven't been set");
     }
     
