@@ -1,6 +1,6 @@
 package com.mylab.spring.coredemo.entity;
 
-public class User {
+public class User implements Entity, Named{
 
     private Long id;
     private String name;
@@ -13,18 +13,22 @@ public class User {
         this.email = email;
     }
 
+    @Override
     public Long getId() {
         return id;
     }
 
+    @Override
     public void setId(Long id) {
         this.id = id;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
