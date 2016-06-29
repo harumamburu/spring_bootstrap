@@ -1,21 +1,9 @@
 package com.mylab.spring.coredemo.test;
 
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeSuite;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 
-public class BaseTest {
+@ContextConfiguration(locations = "classpath:spring-test-config.xml")
+public class BaseTest extends AbstractTestNGSpringContextTests {
 
-    private ConfigurableApplicationContext context;
-
-    @BeforeSuite
-    public void initializeSpring() {
-        context = new ClassPathXmlApplicationContext("/spring-test-config.xml");
-    }
-
-    @AfterSuite
-    public void closeSpringContext() {
-        context.close();
-    }
 }

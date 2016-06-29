@@ -46,6 +46,12 @@
             <version>LATEST</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.ver}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
