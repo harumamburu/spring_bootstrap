@@ -99,6 +99,12 @@ public class UserDaoTest extends BaseTest {
         userDao.getEntityById(user.getId());
     }
 
+    @Test(dependsOnGroups = "gettersTests",
+            priority = 3)
+    public void deleteNonExistingUserTest() throws DaoException  {
+        Assert.assertNull(userDao.removeEntity(copyUser(user)), "Null should have been returned");
+    }
+
     private User copyUser(User oldUser) {
         User newUser = new User(oldUser.getName(), oldUser.getEmail());
         return newUser;
