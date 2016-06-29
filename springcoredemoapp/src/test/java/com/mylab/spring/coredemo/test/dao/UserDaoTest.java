@@ -71,7 +71,7 @@ public class UserDaoTest extends BaseTest {
             groups = {"negativeTests", "gettersTests"},
             priority = 2,
             expectedExceptions = EntityNotFoundException.class)
-    public void testNegativeGetUserById() throws DaoException  {
+    public void testNegativeGetUserById() throws DaoException {
         userDao.getEntityById(Long.MAX_VALUE);
     }
 
@@ -79,7 +79,7 @@ public class UserDaoTest extends BaseTest {
             groups = {"negativeTests", "gettersTests"},
             priority = 2,
             expectedExceptions = EntityNotFoundException.class)
-    public void testNegativeGetUserByName() throws DaoException  {
+    public void testNegativeGetUserByName() throws DaoException {
         userDao.getEntityByName("");
     }
 
@@ -87,22 +87,33 @@ public class UserDaoTest extends BaseTest {
             groups = {"negativeTests", "gettersTests"},
             priority = 2,
             expectedExceptions = EntityNotFoundException.class)
-    public void testNegativeGetUserByEmail() throws DaoException  {
+    public void testNegativeGetUserByEmail() throws DaoException {
         userDao.getUserByEmail("");
     }
 
     @Test(dependsOnGroups = "gettersTests",
-            priority = 3,
-            expectedExceptions = EntityNotFoundException.class)
-    public void deleteUserTest() throws DaoException  {
-        user = userDao.removeEntity(user);
-        userDao.getEntityById(user.getId());
+            groups = "deletingTests",
+            priority = 3)
+    public void deleteNonExistingUserTest() throws DaoException {
+        User newUser = copyUser(user);
+        newUser.setId(Long.MAX_VALUE);
+        Assert.assertNull(userDao.removeEntity(newUser), "Null should have been returned");
     }
 
     @Test(dependsOnGroups = "gettersTests",
-            priority = 3)
-    public void deleteNonExistingUserTest() throws DaoException  {
-        Assert.assertNull(userDao.removeEntity(copyUser(user)), "Null should have been returned");
+            groups = "deletingTests",
+            priority = 3,
+            expectedExceptions = DaoException.class)
+    public void deleteUserWithNullIdTest() throws DaoException {
+        userDao.removeEntity(copyUser(user));
+    }
+
+    @Test(dependsOnGroups = "deletingTests",
+            priority = 4,
+            expectedExceptions = EntityNotFoundException.class)
+    public void deleteUserTest() throws DaoException {
+        userDao.removeEntity(user);
+        userDao.getEntityById(user.getId());
     }
 
     private User copyUser(User oldUser) {
