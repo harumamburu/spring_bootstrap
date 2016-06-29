@@ -6,11 +6,12 @@
 
     <groupId>com.my.lab</groupId>
     <artifactId>spring.bootstrap</artifactId>
-    <version>0.1</version>
+    <version>1.0</version>
 
     <properties>
         <spring.ver>3.2.13.RELEASE</spring.ver>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
