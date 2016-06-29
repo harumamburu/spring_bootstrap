@@ -34,7 +34,10 @@ public class MemoryUserDao implements UserDao {
     }
 
     @Override
-    public User removeEntity(User entity) {
+    public User removeEntity(User entity) throws DaoException {
+        if (entity.isIdNull()) {
+            throw new DaoException("Entity id is null");
+        }
         return USERS.remove(entity.getId());
     }
 
