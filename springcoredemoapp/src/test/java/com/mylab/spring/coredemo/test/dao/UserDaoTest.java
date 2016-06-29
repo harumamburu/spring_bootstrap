@@ -1,5 +1,6 @@
 package com.mylab.spring.coredemo.test.dao;
 
+import com.mylab.spring.coredemo.dao.NamingDao;
 import com.mylab.spring.coredemo.dao.exception.EntityAlreadyExistsException;
 import com.mylab.spring.coredemo.dao.exception.EntityNotFoundException;
 import com.mylab.spring.coredemo.entity.User;
@@ -13,7 +14,7 @@ public class UserDaoTest {
     @Autowired
     @Qualifier("userMemoryDao")
     private User user;
-    private DAO<User> userDao;
+    private NamingDao<User> userDao;
     
     @Test(groups = "saveTests")
     public void testSaveUser() {
@@ -25,14 +26,14 @@ public class UserDaoTest {
             groups = "gettersTests",
             priority = 1)
     public void testGetUserById() {
-        Assert.assertEquals(userDao.getById(user.getId()), user, "Failed to get user by Id");
+        Assert.assertEquals(userDao.getEntityById(user.getId()), user, "Failed to get user by Id");
     }
 
     @Test(dependsOnMethods = "testSaveUser",
             groups = "gettersTests",
             priority = 1)
     public void testGetUserByName() {
-        Assert.assertEquals(userDao.getByName(user.getName()), user, "Failed to get user by name");
+        Assert.assertEquals(userDao.getEntityByName(user.getName()), user, "Failed to get user by name");
     }
 
     @Test(dependsOnMethods = "testSaveUser",
@@ -49,7 +50,7 @@ public class UserDaoTest {
     public void testNegativeSaveUserWithName() {
         User newUser = copyUser(user);
         newUser.setName("New" + user.getName());
-        userDao.save(user);
+        userDao.saveEntity(user);
     }
 
     @Test(dependsOnMethods = "testSaveUser",
@@ -59,7 +60,7 @@ public class UserDaoTest {
     public void testNegativeSaveUserWithEmail() {
         User newUser = copyUser(user);
         newUser.setEmail("New" + user.getEmail());
-        userDao.save(user);
+        userDao.saveEntity(user);
     }
 
     @Test(dependsOnMethods = "testSaveUser",
@@ -67,29 +68,29 @@ public class UserDaoTest {
             priority = 2,
             expectedExceptions = EntityNotFoundException.class)
     public void testNegativeGetUserById() {
-        userDao.getById(Long.MAX_VALUE);
+        userDao.getEntityById(Long.MAX_VALUE);
     }
 
     @Test(dependsOnMethods = "testSaveUser",
             groups = {"negativeTests", "gettersTests"},
             priority = 2,
             expectedExceptions = EntityNotFoundException.class)
-    public void testNegativeGetUserById() {
-        userDao.getByName("");
+    public void testNegativeGetUserByName() {
+        userDao.getEntityByName("");
     }
 
     @Test(dependsOnMethods = "testSaveUser",
             groups = {"negativeTests", "gettersTests"},
             priority = 2,
             expectedExceptions = EntityNotFoundException.class)
-    public void testNegativeGetUserById() {
-        userDao.getByEmail("");
+    public void testNegativeGetUserByEmail() {
+        userDao.getEntityByEmail("");
     }
 
     @Test(dependsOnGroups = "gettersTests", priority = 3)
     public void deleteUserTest() {
         user = userDao.removeEntity(user);
-        Assert.assertNull(userDao.getById(user.getId()), "Deleted user is still in the storage");
+        Assert.assertNull(userDao.getEntityById(user.getId()), "Deleted user is still in the storage");
     }
 
     private User copyUser(User oldUser) {
