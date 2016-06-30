@@ -8,12 +8,12 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Predicate;
 
 public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements BulkDaoTest<Event, EventDao> {
-
 
     @Resource(name = "eventsList")
     private List<Event> events;
@@ -55,8 +55,11 @@ public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements Bul
     }
 
     @Override
+    @Test(dependsOnMethods = "saveEntity",
+            groups = {"gettersTests", "bulkTests"},
+            priority = 1)
     public void getAllEntities() {
-        Assert.assertEquals(((EventDao) dao).getAllEntities(), events, "Not all events were returned");
+        Assert.assertEquals(((EventDao) dao).getAllEntities(), Collections.singletonList(entity), "Not same events were returned");
     }
 
     @Override
