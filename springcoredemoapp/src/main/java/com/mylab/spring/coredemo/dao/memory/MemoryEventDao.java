@@ -1,53 +1,50 @@
 package com.mylab.spring.coredemo.dao.memory;
 
-import com.mylab.spring.coredemo.dao.BulkDao;
-import com.mylab.spring.coredemo.dao.EventDao;
-import com.mylab.spring.coredemo.dao.exception.DaoException;
+import com.mylab.spring.coredemo.dao.EventDao
+        ;
 import com.mylab.spring.coredemo.entity.Event;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
-public class MemoryEventDao implements EventDao {
+public class MemoryEventDao extends AbstractNamingMemoryDao<Event> implements EventDao {
 
     private final static AtomicLong COUNTER = new AtomicLong();
     private final Map<Long, Event> EVENTS = new ConcurrentHashMap<>(4, 0.9f, 1);
 
     @Override
-    public Event saveEntity(Event entity) throws DaoException {
-        return null;
+    protected Map<Long, Event> getStorage() {
+        return EVENTS;
     }
 
     @Override
-    public Event getEntityById(Long id) throws DaoException {
-        return null;
+    protected AtomicLong getCounter() {
+        return COUNTER;
     }
 
     @Override
-    public Event removeEntity(Event entity) throws DaoException {
-        return null;
-    }
-
-    @Override
-    public Event getEntityByName(String name) throws DaoException {
-        return null;
+    protected boolean isSavedAlready(Event entity) {
+        return EVENTS.values().parallelStream().anyMatch(event -> event.getName().equals(entity.getName()));
     }
 
     @Override
     public List<Event> getEventsInRange(Date from, Date to) {
-        return null;
-    }
-
-    @Override
-    public List<Event> getAllEntities() {
-        return null;
+        return EVENTS.values().parallelStream().filter(event -> event.getDate().after(from))
+                .filter(event -> event.getDate().before(to)).collect(Collectors.toList());
     }
 
     @Override
     public List<Event> getEventsToDate(Date to) {
-        return null;
+        return getEventsInRange(new Date(), to);
+    }
+
+    @Override
+    public List<Event> getAllEntities() {
+        return new ArrayList<>(EVENTS.values());
     }
 }
