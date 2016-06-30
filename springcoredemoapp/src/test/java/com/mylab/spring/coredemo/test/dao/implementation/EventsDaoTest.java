@@ -8,13 +8,15 @@ import com.mylab.spring.coredemo.entity.Event;
 import com.mylab.spring.coredemo.test.dao.BulkDaoTest;
 import com.mylab.spring.coredemo.test.dao.NamingDaoTest;
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import javax.annotation.Resource;
-import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements BulkDaoTest<Event, EventDao> {
 
@@ -37,10 +39,28 @@ public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements Bul
         dao = eventDao;
     }
 
+    @DataProvider(name = "eventsListPopulator")
+    public Iterator<Object[]> populate() {
+        return new Iterator<Object[]>() {
+            Iterator<Event> internal = events.iterator();
+            @Override
+            public boolean hasNext() {
+                return internal.hasNext();
+            }
 
-    @Test(groups = "saveTests")
-    public void saveEvent() throws DaoException {
-        saveEntity();
+            @Override
+            public Object[] next() {
+                return new Object[]{internal.next()};
+            }
+        };
+    }
+
+
+    @Test(groups = "saveTests", dataProvider = "eventsListPopulator")
+    public void saveEvent(Event event) throws DaoException {
+        entity = dao.saveEntity(event);
+        Assert.assertNotNull(entity, "Entity wasn't saved");
+        Assert.assertNotNull(entity.getId(), "Id haven't been set");
     }
 
     @Test(dependsOnMethods = "saveEvent",
@@ -61,7 +81,7 @@ public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements Bul
             groups = {"gettersTests", "eventGettersTests", "bulkTests"},
             priority = 1)
     public void getEventsInRange() {
-        assertAllMatchPredicate(((EventDao) dao).getEventsInRange(from, to),
+        assertFilterPredicate(((EventDao) dao).getEventsInRange(from, to),
                 event -> event.getDate().after(from) && event.getDate().before(to));
     }
 
@@ -69,11 +89,12 @@ public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements Bul
             groups = {"gettersTests", "eventGettersTests", "bulkTests"},
             priority = 1)
     public void getEventsToDate() {
-        assertAllMatchPredicate(((EventDao) dao).getEventsToDate(to), event -> event.getDate().before(to));
+        assertFilterPredicate(((EventDao) dao).getEventsToDate(to), event -> event.getDate().after(new Date()) &&
+                event.getDate().before(to));
     }
 
-    private void assertAllMatchPredicate(List<Event> eventsToAssert, Predicate<? super Event> predicate) {
-        Assert.assertTrue(eventsToAssert.parallelStream().allMatch(predicate),
+    private void assertFilterPredicate(List<Event> eventsToAssert, Predicate<? super Event> predicate) {
+        Assert.assertEquals(eventsToAssert, events.parallelStream().filter(predicate).collect(Collectors.toList()),
                 "Not all expected events were returned");
     }
 
@@ -82,7 +103,7 @@ public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements Bul
             groups = {"gettersTests", "eventGettersTests", "bulkTests"},
             priority = 1)
     public void getAllEntities() {
-        Assert.assertEquals(((EventDao) dao).getAllEntities(), Collections.singletonList(entity), "Not same events were returned");
+        Assert.assertEquals(((EventDao) dao).getAllEntities(), events, "Not same events were returned");
     }
 
     @Test(dependsOnMethods = "saveEvent",
