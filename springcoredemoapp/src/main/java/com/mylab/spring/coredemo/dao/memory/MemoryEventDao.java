@@ -47,6 +47,8 @@ public class MemoryEventDao extends AbstractNamingMemoryDao<Event> implements Ev
 
     @Override
     public List<Event> getAllEntities() {
-        return new ArrayList<>(EVENTS.values());
+        return EVENTS.values().parallelStream()
+                .sorted(Comparator.comparing(Event::getId))
+                .collect(Collectors.toList());
     }
 }
