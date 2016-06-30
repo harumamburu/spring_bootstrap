@@ -2,7 +2,6 @@ package com.mylab.spring.coredemo.dao.memory;
 
 import com.mylab.spring.coredemo.dao.UserDao;
 import com.mylab.spring.coredemo.dao.exception.DaoException;
-import com.mylab.spring.coredemo.dao.exception.EntityAlreadyExistsException;
 import com.mylab.spring.coredemo.dao.exception.EntityNotFoundException;
 import com.mylab.spring.coredemo.entity.User;
 

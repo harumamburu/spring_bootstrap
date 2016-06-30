@@ -9,12 +9,12 @@ import org.testng.Assert;
 public abstract class NamingDaoTest<T extends Entity & Named, K extends NamingDao<T>> extends AbstractDaoTest<T, K> {
 
     protected void getEntityByName() throws DaoException {
-        Assert.assertEquals(((K) dao).getEntityByName(((T) entity).getName()), entity, "Failed to get entity by name");
+        Assert.assertEquals(((K) dao).getEntityByName(entity.getName()), entity, "Failed to get entity by name");
     }
 
     protected void saveEntityWithUniqueNameViolated() throws DaoException {
-        T newEntity = (T) copyEntity(entity);
-        newEntity.setName("New" + ((T) entity).getName());
+        T newEntity = copyEntity(entity);
+        newEntity.setName("New" + entity.getName());
         dao.saveEntity(entity);
     }
 

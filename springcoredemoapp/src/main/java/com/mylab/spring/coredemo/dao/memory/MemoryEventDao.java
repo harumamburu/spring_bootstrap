@@ -4,7 +4,6 @@ import com.mylab.spring.coredemo.dao.EventDao
         ;
 import com.mylab.spring.coredemo.entity.Event;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
