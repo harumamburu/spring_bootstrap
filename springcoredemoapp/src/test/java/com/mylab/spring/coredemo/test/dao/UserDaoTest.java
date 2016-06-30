@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
 
 import javax.annotation.Resource;
 
-public class UserDaoTest extends AbstractDaoTest<User, UserDao> {
+public class UserDaoTest extends NamingDaoTest<User, UserDao> {
 
     @Override
     @Resource(name = "userMemoryDao")

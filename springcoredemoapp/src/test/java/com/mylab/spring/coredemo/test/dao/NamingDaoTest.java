@@ -1,7 +1,6 @@
 package com.mylab.spring.coredemo.test.dao;
 
 import com.mylab.spring.coredemo.dao.NamingDao;
-import com.mylab.spring.coredemo.dao.UserDao;
 import com.mylab.spring.coredemo.dao.exception.DaoException;
 import com.mylab.spring.coredemo.dao.exception.EntityAlreadyExistsException;
 import com.mylab.spring.coredemo.dao.exception.EntityNotFoundException;
@@ -10,7 +9,7 @@ import com.mylab.spring.coredemo.entity.Named;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public abstract class NamingDaoTest<T extends Entity & Named, K extends NamingDao<T>> extends AbstractDaoTest {
+public abstract class NamingDaoTest<T extends Entity & Named, K extends NamingDao<T>> extends AbstractDaoTest<T, K> {
 
     @Test(dependsOnMethods = "saveEntity",
             groups = "gettersTests",
