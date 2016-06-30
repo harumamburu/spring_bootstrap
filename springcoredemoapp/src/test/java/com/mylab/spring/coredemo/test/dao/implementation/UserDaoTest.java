@@ -1,10 +1,11 @@
-package com.mylab.spring.coredemo.test.dao;
+package com.mylab.spring.coredemo.test.dao.implementation;
 
 import com.mylab.spring.coredemo.dao.UserDao;
 import com.mylab.spring.coredemo.dao.exception.DaoException;
 import com.mylab.spring.coredemo.dao.exception.EntityAlreadyExistsException;
 import com.mylab.spring.coredemo.dao.exception.EntityNotFoundException;
 import com.mylab.spring.coredemo.entity.User;
+import com.mylab.spring.coredemo.test.dao.NamingDaoTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Assert;
 import org.testng.annotations.Test;
