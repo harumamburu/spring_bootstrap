@@ -2,17 +2,54 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
                            http://www.springframework.org/schema/context
-                           http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+                           http://www.springframework.org/schema/context/spring-context-3.2.xsd
+                           http://www.springframework.org/schema/util
+                           http://www.springframework.org/schema/util/spring-util-3.2.xsd">
 
     <context:annotation-config/>
 
-    <bean class="com.mylab.spring.coredemo.entity.User" scope="prototype"
+    <!-- User Dao Test Beans -->
+    <bean class="com.mylab.spring.coredemo.entity.User" scope="prototype" lazy-init="true"
           c:name="Testing User" c:email="test@test.com"/>
 
     <bean id="userMemoryDao" class="com.mylab.spring.coredemo.dao.memory.MemoryUserDao"/>
+
+    <!-- Event Dao Test Beans -->
+    <bean id="eventBean" class="com.mylab.spring.coredemo.entity.Event" scope="prototype" lazy-init="true"
+          c:name="Denomination!" c:basePrice="500.0"
+          c:date="#{new java.util.Calendar.Builder().setDate(2016, 7, 1).setTimeOfDay(12, 0, 0).build().getTime()}"
+          p:rating="LOW"/>
+
+    <util:list id="eventsList" scope="prototype" value-type="com.mylab.spring.coredemo.entity.Event">
+        <ref bean="eventBean"/>
+        <bean class="com.mylab.spring.coredemo.entity.Event" scope="prototype" lazy-init="true"
+              c:name="Test Event 2" c:basePrice="20.0"
+              c:date="#{new java.util.Calendar.Builder().setDate(2016, 7, 8).setTimeOfDay(14, 30, 0).build().getTime()}"
+              p:rating="AVERAGE"/>
+        <bean class="com.mylab.spring.coredemo.entity.Event" scope="prototype" lazy-init="true"
+              c:name="Test Event 3" c:basePrice="30.0"
+              c:date="#{new java.util.Calendar.Builder().setDate(2016, 7, 15).setTimeOfDay(07, 45, 0).build().getTime()}"
+              p:rating="AVERAGE"/>
+        <bean class="com.mylab.spring.coredemo.entity.Event" scope="prototype" lazy-init="true"
+              c:name="Test Event 4" c:basePrice="40.0"
+              c:date="#{new java.util.Calendar.Builder().setDate(2016, 7, 22).setTimeOfDay(18, 20, 0).build().getTime()}"
+              p:rating="HIGH"/>
+    </util:list>
+
+    <bean id="eventMemoryDao" class="com.mylab.spring.coredemo.dao.memory.MemoryEventDao"/>
+
+    <bean id="fromDate" class="java.util.Date" scope="prototype" lazy-init="true">
+        <constructor-arg value="#{new java.util.Calendar.Builder().setDate(2016, 7, 7).build().getTime().getTime()}"/>
+    </bean>
+
+    <bean id="toDate" class="java.util.Date" scope="prototype" lazy-init="true">
+        <constructor-arg value="#{new java.util.Calendar.Builder().setDate(2016, 7, 16).build().getTime().getTime()}"/>
+    </bean>
 
 </beans>
