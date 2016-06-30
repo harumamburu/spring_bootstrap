@@ -7,47 +7,31 @@ import com.mylab.spring.coredemo.dao.exception.EntityNotFoundException;
 import com.mylab.spring.coredemo.entity.User;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class MemoryUserDao implements UserDao {
+public class MemoryUserDao extends AbstractNamingMemoryDao<User> implements UserDao {
 
     private final static AtomicLong COUNTER = new AtomicLong();
     private final Map<Long, User> USERS = new ConcurrentHashMap<>(4, 0.9f, 1);
 
     @Override
-    public User saveEntity(User entity) throws DaoException {
-        if (USERS.values().parallelStream().anyMatch(
-                user -> user.getEmail().equals(entity.getEmail()) || user.getName().equals(entity.getName()))) {
-            throw new EntityAlreadyExistsException(String.format("%s already exists", entity.toString()));
-        }
-        entity.setId(COUNTER.incrementAndGet());
-        USERS.put(entity.getId(), entity);
-        return entity;
+    protected Map<Long, User> getStorage() {
+        return USERS;
     }
 
     @Override
-    public User getEntityById(Long id) throws DaoException {
-        return Optional.ofNullable(USERS.get(id))
-                .orElseThrow(() -> new EntityNotFoundException(String.format("User with id={%d} doesn't exists", id)));
+    protected AtomicLong getCounter() {
+        return COUNTER;
     }
 
     @Override
-    public User removeEntity(User entity) throws DaoException {
-        if (entity.isIdNull()) {
-            throw new DaoException("Entity id is null");
-        }
-        return USERS.remove(entity.getId());
+    protected boolean isSavedAlready(User entity) {
+        return USERS.values().parallelStream().anyMatch(
+                user -> user.getEmail().equals(entity.getEmail()) || user.getName().equals(entity.getName()));
     }
 
     @Override
-    public User getEntityByName(String name) throws DaoException {
-        return USERS.values().parallelStream()
-                .filter(user -> user.getName().equals(name)).findAny()
-                .orElseThrow(() -> new EntityNotFoundException(String.format("User with name={%s} doesn't exists", name)));
-    }
-
     public User getUserByEmail(String email) throws DaoException {
         return USERS.values().parallelStream()
                 .filter(user -> user.getEmail().equals(email)).findAny()
