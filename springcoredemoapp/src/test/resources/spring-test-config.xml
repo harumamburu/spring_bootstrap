@@ -23,33 +23,41 @@
     <!-- Event Dao Test Beans -->
     <bean id="eventBean" class="com.mylab.spring.coredemo.entity.Event" scope="prototype" lazy-init="true"
           c:name="Denomination!" c:basePrice="500.0"
-          c:date="#{new java.util.Calendar.Builder().setDate(2016, 7, 1).setTimeOfDay(12, 0, 0).build().getTime()}"
+          c:date="#{T(java.util.Date).from(T(java.time.LocalDateTime).now().plusDays(1)
+                    .atZone(T(java.time.ZoneId).systemDefault()).toInstant())}"
           p:rating="LOW"/>
 
     <util:list id="eventsList" scope="prototype" value-type="com.mylab.spring.coredemo.entity.Event">
         <ref bean="eventBean"/>
         <bean class="com.mylab.spring.coredemo.entity.Event" scope="prototype" lazy-init="true"
               c:name="Test Event 2" c:basePrice="20.0"
-              c:date="#{new java.util.Calendar.Builder().setDate(2016, 7, 8).setTimeOfDay(14, 30, 0).build().getTime()}"
+              c:date="#{T(java.util.Date).from(T(java.time.LocalDateTime).now().plusDays(1).plusWeeks(1)
+                    .atZone(T(java.time.ZoneId).systemDefault()).toInstant())}"
               p:rating="AVERAGE"/>
         <bean class="com.mylab.spring.coredemo.entity.Event" scope="prototype" lazy-init="true"
               c:name="Test Event 3" c:basePrice="30.0"
-              c:date="#{new java.util.Calendar.Builder().setDate(2016, 7, 15).setTimeOfDay(07, 45, 0).build().getTime()}"
+              c:date="#{T(java.util.Date).from(T(java.time.LocalDateTime).now().plusDays(1).plusWeeks(2)
+                    .atZone(T(java.time.ZoneId).systemDefault()).toInstant())}"
               p:rating="AVERAGE"/>
         <bean class="com.mylab.spring.coredemo.entity.Event" scope="prototype" lazy-init="true"
               c:name="Test Event 4" c:basePrice="40.0"
-              c:date="#{new java.util.Calendar.Builder().setDate(2016, 7, 22).setTimeOfDay(18, 20, 0).build().getTime()}"
+              c:date="#{T(java.util.Date).from(T(java.time.LocalDateTime).now().plusDays(1).plusWeeks(3)
+                    .atZone(T(java.time.ZoneId).systemDefault()).toInstant())}"
               p:rating="HIGH"/>
     </util:list>
 
     <bean id="eventMemoryDao" class="com.mylab.spring.coredemo.dao.memory.MemoryEventDao"/>
 
     <bean id="fromDate" class="java.util.Date" scope="prototype" lazy-init="true">
-        <constructor-arg value="#{new java.util.Calendar.Builder().setDate(2016, 7, 7).build().getTime().getTime()}"/>
+        <constructor-arg value="#{T(java.util.Date).from(T(java.time.LocalDateTime).now().plusWeeks(1)
+                                .atZone(T(java.time.ZoneId).systemDefault()).toInstant()).getTime()}"/>
+        <!-- minus one date from the events list above with this one as a lower bound -->
     </bean>
 
     <bean id="toDate" class="java.util.Date" scope="prototype" lazy-init="true">
-        <constructor-arg value="#{new java.util.Calendar.Builder().setDate(2016, 7, 16).build().getTime().getTime()}"/>
+        <constructor-arg value="#{T(java.util.Date).from(T(java.time.LocalDateTime).now().plusDays(2).plusWeeks(2)
+                                .atZone(T(java.time.ZoneId).systemDefault()).toInstant()).getTime()}"/>
+        <!-- minus one more date from the events list above with this one as an upper bound -->
     </bean>
 
 </beans>
