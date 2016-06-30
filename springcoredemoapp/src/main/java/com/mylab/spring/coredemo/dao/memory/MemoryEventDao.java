@@ -5,6 +5,7 @@ import com.mylab.spring.coredemo.dao.EventDao
 import com.mylab.spring.coredemo.entity.Event;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +36,8 @@ public class MemoryEventDao extends AbstractNamingMemoryDao<Event> implements Ev
     @Override
     public List<Event> getEventsInRange(Date from, Date to) {
         return EVENTS.values().parallelStream().filter(event -> event.getDate().after(from))
-                .filter(event -> event.getDate().before(to)).collect(Collectors.toList());
+                .filter(event -> event.getDate().before(to))
+                .sorted(Comparator.comparing(Event::getId)).collect(Collectors.toList());
     }
 
     @Override
