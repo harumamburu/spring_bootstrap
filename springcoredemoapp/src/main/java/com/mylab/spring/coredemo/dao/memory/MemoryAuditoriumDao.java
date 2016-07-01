@@ -51,6 +51,7 @@ public class MemoryAuditoriumDao extends AbstractNamingMemoryDao<Auditorium> imp
 
     @Override
     protected boolean isSavedAlready(Auditorium entity) {
+        // check if auditorium with such name was already persisted
         return AUDITORIUMS.values().parallelStream()
                 .anyMatch(auditorium -> auditorium.getName().equals(entity.getName()));
     }

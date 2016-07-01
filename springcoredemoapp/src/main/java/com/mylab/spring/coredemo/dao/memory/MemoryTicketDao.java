@@ -53,6 +53,6 @@ public class MemoryTicketDao extends AbstractMemoryDao<Ticket> implements Ticket
     protected boolean isSavedAlready(Ticket entity) {
         // check if a ticket for a particular event and seat place was already saved
         return TICKETS.values().parallelStream().anyMatch(
-                ticket -> ticket.getEvent().equals(entity.getEvent()) && ticket.getSeat() == entity.getSeat());
+                ticket -> ticket.getEvent().equals(entity.getEvent()) && ticket.getSeat().equals(entity.getSeat()));
     }
 }

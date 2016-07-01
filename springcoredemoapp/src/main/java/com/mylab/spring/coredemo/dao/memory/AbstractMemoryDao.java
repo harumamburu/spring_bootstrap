@@ -19,7 +19,7 @@ public abstract class AbstractMemoryDao<T extends Entity> implements Dao<T> {
     /**
      * Check if the passed entity was already persisted, by searching its unique fields
      * in stored entities
-     * @param entity
+     * @param entity to get unique values from for the check
      * @return true if at least one entity with unique field
      * of the same value as from the passed was already saved,
      * false otherwise
