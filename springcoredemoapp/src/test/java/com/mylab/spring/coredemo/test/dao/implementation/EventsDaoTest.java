@@ -8,6 +8,7 @@ import com.mylab.spring.coredemo.dao.exception.IllegalDaoRequestException;
 import com.mylab.spring.coredemo.entity.Event;
 import com.mylab.spring.coredemo.test.dao.BulkDaoTest;
 import com.mylab.spring.coredemo.test.dao.NamingDaoTest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -23,7 +24,7 @@ import java.util.stream.Collectors;
 
 public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements BulkDaoTest<Event, EventDao> {
 
-    @Resource(name = "eventsList")
+    @Autowired
     private List<Event> events;
     @Resource(name = "fromDate")
     private Date from;
