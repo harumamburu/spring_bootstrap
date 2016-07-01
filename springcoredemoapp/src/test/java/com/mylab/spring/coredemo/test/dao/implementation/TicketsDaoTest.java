@@ -107,6 +107,26 @@ public class TicketsDaoTest extends AbstractDaoTest<Ticket, TicketDao> implement
     }
 
     @Test(dependsOnMethods = "saveTicket",
+            groups = {"gettersTests", "ticketGettersTests", "bulkTests"},
+            priority = 1)
+    public void getTicketsForNonExistingUser() {
+        User newUser = new User("new_" + user.getName(), "new_" + user.getEmail());
+        assertEqualListAndFilteredTickets(((TicketDao) dao).getTicketsForUser(newUser),
+                ticket -> ticket.getUser().equals(newUser),
+                "There shouldn't be tickets for fake user");
+    }
+
+    @Test(dependsOnMethods = "saveTicket",
+            groups = {"gettersTests", "ticketGettersTests", "bulkTests"},
+            priority = 1)
+    public void getTicketsForNonExistingEvent() {
+        Event newEvent = new Event("new_" + event.getName(), event.getDate(), event.getBasePrice() + 100500);
+        assertEqualListAndFilteredTickets(((TicketDao) dao).getTicketsForEvent(newEvent),
+                ticket -> ticket.getEvent().equals(newEvent),
+                "There shouldn't be tickets for fake event");
+    }
+
+    @Test(dependsOnMethods = "saveTicket",
             groups = {"negativeTests", "gettersTests", "ticketGettersTests"},
             priority = 2,
             expectedExceptions = EntityNotFoundException.class)

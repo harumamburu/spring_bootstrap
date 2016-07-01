@@ -73,12 +73,16 @@
     <bean id="testTicket" class="com.mylab.spring.coredemo.entity.Ticket" scope="prototype" lazy-init="true"
           c:event="#{ticketTestEvent}" c:user="#{ticketTestUser}" c:seat="10"/>
 
+    <bean id="testTicket 2" class="com.mylab.spring.coredemo.entity.Ticket" scope="prototype" lazy-init="true"
+          c:event="#{testingEvent}" c:user="#{ticketTestUser}" c:seat="11"/>
+
+    <bean id="testTicket 3" class="com.mylab.spring.coredemo.entity.Ticket" scope="prototype" lazy-init="true"
+          c:event="#{ticketTestEvent}" c:user="#{testUser}" c:seat="12"/>
+
     <util:list id="ticketsList" scope="prototype" value-type="com.mylab.spring.coredemo.entity.Ticket">
         <ref bean="testTicket"/>
-        <bean id="testTicket 2" class="com.mylab.spring.coredemo.entity.Ticket" scope="prototype" lazy-init="true"
-              c:event="#{testingEvent}" c:user="#{ticketTestUser}" c:seat="11"/>
-        <bean id="testTicket 2" class="com.mylab.spring.coredemo.entity.Ticket" scope="prototype" lazy-init="true"
-              c:event="#{ticketTestEvent}" c:user="#{testUser}" c:seat="12"/>
+        <ref bean="testTicket 2"/>
+        <ref bean="testTicket 3"/>
     </util:list>
 
     <bean id="ticketMemoryDao" class="com.mylab.spring.coredemo.dao.memory.MemoryTicketDao"/>
