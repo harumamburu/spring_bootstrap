@@ -30,6 +30,7 @@ public class MemoryEventDao extends AbstractNamingMemoryDao<Event> implements Ev
 
     @Override
     protected boolean isSavedAlready(Event entity) {
+        // check if an event with such name was already saved
         return EVENTS.values().parallelStream().anyMatch(event -> event.getName().equals(entity.getName()));
     }
 

@@ -26,6 +26,7 @@ public class MemoryUserDao extends AbstractNamingMemoryDao<User> implements User
 
     @Override
     protected boolean isSavedAlready(User entity) {
+        // check if a user with such name or email was saved before
         return USERS.values().parallelStream().anyMatch(
                 user -> user.getEmail().equals(entity.getEmail()) || user.getName().equals(entity.getName()));
     }
