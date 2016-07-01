@@ -120,6 +120,23 @@ public class AuditoriumsDaoTest extends NamingDaoTest<Auditorium, AuditoriumDao>
     protected void getNonExistingAuditoriumByName() throws DaoException {
         getNonExistingEntityByName();
     }
+
+    @Test(dependsOnMethods = "saveAuditorium",
+            groups = {"negativeTests", "gettersTests", "auditoriumGettersTests", "bulkTests"},
+            priority = 2,
+            expectedExceptions = EntityNotFoundException.class)
+    protected void getNonExistingAuditoriumSeatsNumber() throws DaoException {
+        ((AuditoriumDao) dao).getNumberOfSeats(Long.MAX_VALUE);
+    }
+
+    @Test(dependsOnMethods = "saveAuditorium",
+            groups = {"negativeTests", "gettersTests", "auditoriumGettersTests", "bulkTests"},
+            priority = 2,
+            expectedExceptions = EntityNotFoundException.class)
+    protected void getNonExistingAuditoriumVipSeats() throws DaoException {
+        ((AuditoriumDao) dao).getVipSeats(Long.MAX_VALUE);
+    }
+
     @Test(dependsOnMethods = "saveAuditorium",
             groups = {"deletingTests", "auditoriumDeletingTests", "negativeTests"},
             priority = 3,
