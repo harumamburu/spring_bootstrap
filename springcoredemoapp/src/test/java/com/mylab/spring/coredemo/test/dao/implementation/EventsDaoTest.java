@@ -4,6 +4,7 @@ import com.mylab.spring.coredemo.dao.EventDao;
 import com.mylab.spring.coredemo.dao.exception.DaoException;
 import com.mylab.spring.coredemo.dao.exception.EntityAlreadyExistsException;
 import com.mylab.spring.coredemo.dao.exception.EntityNotFoundException;
+import com.mylab.spring.coredemo.dao.exception.IllegalDaoRequestException;
 import com.mylab.spring.coredemo.entity.Event;
 import com.mylab.spring.coredemo.test.dao.BulkDaoTest;
 import com.mylab.spring.coredemo.test.dao.NamingDaoTest;
@@ -12,6 +13,8 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -128,6 +131,31 @@ public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements Bul
             expectedExceptions = EntityNotFoundException.class)
     public void getNonExistingEventByName() throws DaoException {
         getNonExistingEntityByName();
+    }
+
+    @Test(dependsOnMethods = "saveEvent",
+            groups = {"gettersTests", "eventGettersTests", "bulkTests", "negativeTests"},
+            priority = 2,
+            expectedExceptions = IllegalDaoRequestException.class)
+    public void getEventsInBrokenRange() {
+        ((EventDao) dao).getEventsInRange(to, from);
+    }
+
+    @Test(dependsOnMethods = "saveEvent",
+            groups = {"gettersTests", "eventGettersTests", "bulkTests", "negativeTests"},
+            priority = 2,
+            expectedExceptions = IllegalDaoRequestException.class)
+    public void getEventsInNoRange() {
+        ((EventDao) dao).getEventsInRange(to, to);
+    }
+
+    @Test(dependsOnMethods = "saveEvent",
+            groups = {"gettersTests", "eventGettersTests", "bulkTests", "negativeTests"},
+            priority = 2,
+            expectedExceptions = IllegalDaoRequestException.class)
+    public void getEventsToDateBeforeNow() {
+        ((EventDao) dao).getEventsToDate(Date.from(
+                LocalDateTime.now().minusWeeks(1).atZone(ZoneId.systemDefault()).toInstant()));
     }
 
     @Test(dependsOnMethods = "saveEvent",
