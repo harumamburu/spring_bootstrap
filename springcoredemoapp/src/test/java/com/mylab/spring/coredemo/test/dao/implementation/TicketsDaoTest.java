@@ -2,7 +2,9 @@ package com.mylab.spring.coredemo.test.dao.implementation;
 
 import com.mylab.spring.coredemo.dao.exception.DaoException;
 import com.mylab.spring.coredemo.dao.exception.EntityNotFoundException;
+import com.mylab.spring.coredemo.dao.TicketDao;
 import com.mylab.spring.coredemo.entity.Event;
+import com.mylab.spring.coredemo.entity.Ticket;
 import com.mylab.spring.coredemo.entity.User;
 import com.mylab.spring.coredemo.test.dao.AbstractDaoTest;
 import com.mylab.spring.coredemo.test.dao.BulkDaoTest;
@@ -12,7 +14,6 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
@@ -82,7 +83,7 @@ public class TicketsDaoTest extends AbstractDaoTest<Ticket, TicketDao> implement
             groups = {"gettersTests", "ticketGettersTests", "bulkTests"},
             priority = 1)
     public void getTicketsForEvent() {
-        assertEqualListAndFilteredTickets(((TicketDao) dao).getTicketsByEvent(event),
+        assertEqualListAndFilteredTickets(((TicketDao) dao).getTicketsForEvent(event),
                 ticket -> ticket.getEvent().equals(event),
                 "Returned tickets' events don't match");
     }
@@ -91,7 +92,7 @@ public class TicketsDaoTest extends AbstractDaoTest<Ticket, TicketDao> implement
             groups = {"gettersTests", "ticketGettersTests", "bulkTests"},
             priority = 1)
     public void getTicketsForUser() {
-        assertEqualListAndFilteredTickets(((TicketDao) dao).getTicketsByUser(user),
+        assertEqualListAndFilteredTickets(((TicketDao) dao).getTicketsForUser(user),
                 ticket -> ticket.getUser().equals(user),
                 "Returned tickets' users don't match");
     }
