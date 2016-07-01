@@ -27,7 +27,7 @@ public class UserDaoTest extends NamingDaoTest<User, UserDao> {
     }
 
 
-    @Test(groups = "saveTests")
+    @Test(groups = { "saveTests", "userSaveTests"})
     public void saveUser() throws DaoException {
         saveEntity();
     }
@@ -96,7 +96,7 @@ public class UserDaoTest extends NamingDaoTest<User, UserDao> {
     }
 
     @Test(dependsOnMethods = "saveUser",
-            groups = {"deletingTests", "userDeletingTests", "negativeTests"},
+            groups = {"deletingTests", "userDeletingTests"},
             priority = 3)
     public void deleteNonExistingUser() throws DaoException {
         deleteNonExistingEntity();

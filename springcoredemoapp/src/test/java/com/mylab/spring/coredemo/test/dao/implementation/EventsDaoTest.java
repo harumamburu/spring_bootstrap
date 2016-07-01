@@ -60,7 +60,8 @@ public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements Bul
     }
 
 
-    @Test(groups = "saveTests", dataProvider = "eventsListPopulator")
+    @Test(groups = {"saveTests", "eventSaveTests"},
+            dataProvider = "eventsListPopulator")
     public void saveEvent(Event event) throws DaoException {
         entity = dao.saveEntity(event);
         Assert.assertNotNull(entity, "Entity wasn't saved");
@@ -85,7 +86,7 @@ public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements Bul
             groups = {"gettersTests", "eventGettersTests", "bulkTests"},
             priority = 1)
     public void getEventsInRange() throws DaoException {
-        assertFilterPredicate(((EventDao) dao).getEventsInRange(from, to),
+        assertEqualListAndFilteredEvents(((EventDao) dao).getEventsInRange(from, to),
                 event -> event.getDate().after(from) && event.getDate().before(to));
     }
 
@@ -93,12 +94,12 @@ public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements Bul
             groups = {"gettersTests", "eventGettersTests", "bulkTests"},
             priority = 1)
     public void getEventsToDate() throws DaoException {
-        assertFilterPredicate(((EventDao) dao).getEventsToDate(to), event -> event.getDate().after(new Date()) &&
-                event.getDate().before(to));
+        assertEqualListAndFilteredEvents(((EventDao) dao).getEventsToDate(to),
+                event -> event.getDate().after(new Date()) && event.getDate().before(to));
     }
 
-    private void assertFilterPredicate(List<Event> eventsToAssert, Predicate<? super Event> predicate) {
-        Assert.assertEquals(eventsToAssert, events.parallelStream().filter(predicate).collect(Collectors.toList()),
+    private void assertEqualListAndFilteredEvents(List<Event> eventsToAssert, Predicate<? super Event> filterPredicate) {
+        Assert.assertEquals(eventsToAssert, events.parallelStream().filter(filterPredicate).collect(Collectors.toList()),
                 "Not all expected events were returned");
     }
 
@@ -160,7 +161,7 @@ public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements Bul
     }
 
     @Test(dependsOnMethods = "saveEvent",
-            groups = {"deletingTests", "eventDeletingTests", "negativeTests"},
+            groups = {"deletingTests", "eventDeletingTests"},
             priority = 3)
     public void deleteNonExistingEvent() throws DaoException {
         deleteNonExistingEntity();
