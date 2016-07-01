@@ -161,8 +161,9 @@ public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements Bul
     }
 
     @Test(dependsOnMethods = "saveEvent",
-            groups = {"deletingTests", "eventDeletingTests"},
-            priority = 3)
+            groups = {"deletingTests", "eventDeletingTests", "negativeTests"},
+            priority = 3,
+            expectedExceptions = EntityNotFoundException.class)
     public void deleteNonExistingEvent() throws DaoException {
         deleteNonExistingEntity();
     }

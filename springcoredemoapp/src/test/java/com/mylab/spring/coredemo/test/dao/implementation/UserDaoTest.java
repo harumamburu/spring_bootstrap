@@ -95,8 +95,9 @@ public class UserDaoTest extends NamingDaoTest<User, UserDao> {
     }
 
     @Test(dependsOnMethods = "saveUser",
-            groups = {"deletingTests", "userDeletingTests"},
-            priority = 3)
+            groups = {"deletingTests", "userDeletingTests", "negativeTests"},
+            priority = 3,
+            expectedExceptions = EntityNotFoundException.class)
     public void deleteNonExistingUser() throws DaoException {
         deleteNonExistingEntity();
     }

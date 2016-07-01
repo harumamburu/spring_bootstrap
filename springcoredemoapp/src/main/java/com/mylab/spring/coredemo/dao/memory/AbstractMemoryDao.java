@@ -9,6 +9,7 @@ import com.mylab.spring.coredemo.entity.Entity;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Supplier;
 
 public abstract class AbstractMemoryDao<T extends Entity> implements Dao<T> {
 
@@ -38,7 +39,7 @@ public abstract class AbstractMemoryDao<T extends Entity> implements Dao<T> {
     @Override
     public T getEntityById(Long id) throws DaoException {
         return Optional.ofNullable(getStorage().get(id))
-                .orElseThrow(() -> new EntityNotFoundException(String.format("Entity with id={%d} doesn't exists", id)));
+                .orElseThrow(supplyEntityNotFound(id));
     }
 
     @Override
@@ -46,6 +47,11 @@ public abstract class AbstractMemoryDao<T extends Entity> implements Dao<T> {
         if (entity.isIdNull()) {
             throw new DaoException("Entity id is null");
         }
-        return getStorage().remove(entity.getId());
+        return Optional.ofNullable(getStorage().remove(entity.getId()))
+                .orElseThrow(supplyEntityNotFound(entity.getId()));
+    }
+
+    private Supplier<EntityNotFoundException> supplyEntityNotFound(Long id) {
+        return () -> new EntityNotFoundException(String.format("Entity with id={%d} doesn't exists", id));
     }
 }

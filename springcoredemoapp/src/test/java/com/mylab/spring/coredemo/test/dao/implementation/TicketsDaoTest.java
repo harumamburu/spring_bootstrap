@@ -135,8 +135,9 @@ public class TicketsDaoTest extends AbstractDaoTest<Ticket, TicketDao> implement
     }
 
     @Test(dependsOnMethods = "saveTicket",
-            groups = {"deletingTests", "ticketDeletingTests"},
-            priority = 3)
+            groups = {"deletingTests", "ticketDeletingTests", "negativeTests"},
+            priority = 3,
+            expectedExceptions = EntityNotFoundException.class)
     public void deleteNonExistingTicket() throws DaoException {
         deleteNonExistingEntity();
     }
