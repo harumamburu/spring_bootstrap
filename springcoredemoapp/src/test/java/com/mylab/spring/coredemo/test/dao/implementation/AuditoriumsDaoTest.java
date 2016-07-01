@@ -3,6 +3,7 @@ package com.mylab.spring.coredemo.test.dao.implementation;
 import com.mylab.spring.coredemo.dao.exception.DaoException;
 import com.mylab.spring.coredemo.dao.exception.EntityAlreadyExistsException;
 import com.mylab.spring.coredemo.dao.exception.EntityNotFoundException;
+import com.mylab.spring.coredemo.entity.Auditorium;
 import com.mylab.spring.coredemo.test.dao.NamingDaoTest;
 import com.mylab.spring.coredemo.test.dao.BulkDaoTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.testng.annotations.Test;
 
 import javax.annotation.Resource;
 import java.util.Iterator;
+import java.util.List;
 
 public class AuditoriumsDaoTest extends NamingDaoTest<Auditorium, AuditoriumDao>
         implements BulkDaoTest<Auditorium, AuditoriumDao> {
@@ -83,7 +85,7 @@ public class AuditoriumsDaoTest extends NamingDaoTest<Auditorium, AuditoriumDao>
             priority = 1)
     public void getNumberOfSeats() {
         Assert.assertEquals(((AuditoriumDao) dao).getNumberOfSeats(entity.getId()),
-                entity.getSeatsNumber(), "Number of seats doesn't match");
+                entity.getNumberOfSeats(), "Number of seats doesn't match");
     }
 
     @Test(dependsOnMethods = "saveAuditorium",
@@ -142,7 +144,7 @@ public class AuditoriumsDaoTest extends NamingDaoTest<Auditorium, AuditoriumDao>
 
     @Override
     protected Auditorium copyEntity(Auditorium entity) {
-        Auditorium newAuditorium = new Auditorium(entity.getName(), entity.getSeatsNumber());
+        Auditorium newAuditorium = new Auditorium(entity.getName(), entity.getNumberOfSeats());
         newAuditorium.setVipSeats(entity.getVipSeats());
         return newAuditorium;
     }
