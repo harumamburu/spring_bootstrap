@@ -23,9 +23,9 @@ public class TicketsDaoTest extends AbstractDaoTest<Ticket, TicketDao> implement
 
     @Autowired
     private List<Ticket> tickets;
-    @Autowired
+    @Resource(name = "ticketTestEvent")
     private Event event;
-    @Autowired
+    @Resource(name = "ticketTestUser")
     private User user;
 
     @DataProvider(name = "ticketsPopulator")
@@ -59,8 +59,10 @@ public class TicketsDaoTest extends AbstractDaoTest<Ticket, TicketDao> implement
 
 
     @Test(groups = {"saveTests", "ticketsSaveTests"}, dataProvider = "ticketsPopulator")
-    public void saveTicket() throws DaoException {
-        saveEntity();
+    public void saveTicket(Ticket ticket) throws DaoException {
+        entity = dao.saveEntity(ticket);
+        Assert.assertNotNull(entity, "Entity wasn't saved");
+        Assert.assertNotNull(entity.getId(), "Id haven't been set");
     }
 
     @Test(dependsOnMethods = "saveTicket",

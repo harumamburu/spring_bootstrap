@@ -6,7 +6,6 @@ import com.mylab.spring.coredemo.dao.exception.EntityAlreadyExistsException;
 import com.mylab.spring.coredemo.dao.exception.EntityNotFoundException;
 import com.mylab.spring.coredemo.entity.User;
 import com.mylab.spring.coredemo.test.dao.NamingDaoTest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -21,7 +20,7 @@ public class UserDaoTest extends NamingDaoTest<User, UserDao> {
     }
 
     @Override
-    @Autowired
+    @Resource(name = "testUser")
     protected void setEntity(User user) {
         entity = user;
     }

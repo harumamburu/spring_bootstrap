@@ -15,20 +15,20 @@
     <context:annotation-config/>
 
     <!-- User Dao Test Beans -->
-    <bean class="com.mylab.spring.coredemo.entity.User" scope="prototype" lazy-init="true"
+    <bean id="testUser" class="com.mylab.spring.coredemo.entity.User" scope="prototype" lazy-init="true"
           c:name="Testing User" c:email="test@test.com"/>
 
     <bean id="userMemoryDao" class="com.mylab.spring.coredemo.dao.memory.MemoryUserDao"/>
 
     <!-- Event Dao Test Beans -->
-    <bean id="eventBean" class="com.mylab.spring.coredemo.entity.Event" scope="prototype" lazy-init="true"
+    <bean id="testingEvent" class="com.mylab.spring.coredemo.entity.Event" scope="prototype" lazy-init="true"
           c:name="Denomination!" c:basePrice="500.0"
           c:date="#{T(java.util.Date).from(T(java.time.LocalDateTime).now().plusDays(1)
                     .atZone(T(java.time.ZoneId).systemDefault()).toInstant())}"
           p:rating="LOW"/>
 
     <util:list id="eventsList" scope="prototype" value-type="com.mylab.spring.coredemo.entity.Event">
-        <ref bean="eventBean"/>
+        <ref bean="testingEvent"/>
         <bean class="com.mylab.spring.coredemo.entity.Event" scope="prototype" lazy-init="true"
               c:name="Test Event 2" c:basePrice="20.0"
               c:date="#{T(java.util.Date).from(T(java.time.LocalDateTime).now().plusDays(1).plusWeeks(1)
@@ -46,8 +46,6 @@
               p:rating="HIGH"/>
     </util:list>
 
-    <bean id="eventMemoryDao" class="com.mylab.spring.coredemo.dao.memory.MemoryEventDao"/>
-
     <bean id="fromDate" class="java.util.Date" scope="prototype" lazy-init="true">
         <constructor-arg value="#{T(java.util.Date).from(T(java.time.LocalDateTime).now().plusWeeks(1)
                                 .atZone(T(java.time.ZoneId).systemDefault()).toInstant()).getTime()}"/>
@@ -59,5 +57,30 @@
                                 .atZone(T(java.time.ZoneId).systemDefault()).toInstant()).getTime()}"/>
         <!-- minus one more date from the events list above with this one as an upper bound -->
     </bean>
+
+    <bean id="eventMemoryDao" class="com.mylab.spring.coredemo.dao.memory.MemoryEventDao"/>
+
+    <!-- Ticket Dao Test Beans -->
+    <bean id="ticketTestUser" class="com.mylab.spring.coredemo.entity.User" scope="prototype" lazy-init="true"
+          c:name="Ticket User" c:email="ticket@test.com"/>
+
+    <bean id="ticketTestEvent" class="com.mylab.spring.coredemo.entity.Event" scope="prototype" lazy-init="true"
+          c:name="Ticket test" c:basePrice="0.0"
+          c:date="#{T(java.util.Date).from(T(java.time.LocalDateTime).now()
+                    .atZone(T(java.time.ZoneId).systemDefault()).toInstant())}"
+          p:rating="HIGH"/>
+
+    <bean id="testTicket" class="com.mylab.spring.coredemo.entity.Ticket" scope="prototype" lazy-init="true"
+          c:event="#{ticketTestEvent}" c:user="#{ticketTestUser}" c:seat="10"/>
+
+    <util:list id="ticketsList" scope="prototype" value-type="com.mylab.spring.coredemo.entity.Ticket">
+        <ref bean="testTicket"/>
+        <bean id="testTicket 2" class="com.mylab.spring.coredemo.entity.Ticket" scope="prototype" lazy-init="true"
+              c:event="#{testingEvent}" c:user="#{ticketTestUser}" c:seat="11"/>
+        <bean id="testTicket 2" class="com.mylab.spring.coredemo.entity.Ticket" scope="prototype" lazy-init="true"
+              c:event="#{ticketTestEvent}" c:user="#{testUser}" c:seat="12"/>
+    </util:list>
+
+    <bean id="ticketMemoryDao" class="com.mylab.spring.coredemo.dao.memory.MemoryTicketDao"/>
 
 </beans>

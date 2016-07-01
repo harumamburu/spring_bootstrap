@@ -32,7 +32,7 @@ public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements Bul
     private Date to;
 
     @Override
-    @Resource(name = "eventBean")
+    @Resource(name = "testingEvent")
     protected void setEntity(Event event) {
         entity = event;
     }
