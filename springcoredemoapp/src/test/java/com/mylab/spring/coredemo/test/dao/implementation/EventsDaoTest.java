@@ -83,7 +83,7 @@ public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements Bul
     @Test(dependsOnMethods = "saveEvent",
             groups = {"gettersTests", "eventGettersTests", "bulkTests"},
             priority = 1)
-    public void getEventsInRange() {
+    public void getEventsInRange() throws DaoException {
         assertFilterPredicate(((EventDao) dao).getEventsInRange(from, to),
                 event -> event.getDate().after(from) && event.getDate().before(to));
     }
@@ -91,7 +91,7 @@ public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements Bul
     @Test(dependsOnMethods = "saveEvent",
             groups = {"gettersTests", "eventGettersTests", "bulkTests"},
             priority = 1)
-    public void getEventsToDate() {
+    public void getEventsToDate() throws DaoException {
         assertFilterPredicate(((EventDao) dao).getEventsToDate(to), event -> event.getDate().after(new Date()) &&
                 event.getDate().before(to));
     }
@@ -137,7 +137,7 @@ public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements Bul
             groups = {"gettersTests", "eventGettersTests", "bulkTests", "negativeTests"},
             priority = 2,
             expectedExceptions = IllegalDaoRequestException.class)
-    public void getEventsInBrokenRange() {
+    public void getEventsInBrokenRange() throws DaoException {
         ((EventDao) dao).getEventsInRange(to, from);
     }
 
@@ -145,7 +145,7 @@ public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements Bul
             groups = {"gettersTests", "eventGettersTests", "bulkTests", "negativeTests"},
             priority = 2,
             expectedExceptions = IllegalDaoRequestException.class)
-    public void getEventsInNoRange() {
+    public void getEventsInNoRange() throws DaoException {
         ((EventDao) dao).getEventsInRange(to, to);
     }
 
@@ -153,7 +153,7 @@ public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements Bul
             groups = {"gettersTests", "eventGettersTests", "bulkTests", "negativeTests"},
             priority = 2,
             expectedExceptions = IllegalDaoRequestException.class)
-    public void getEventsToDateBeforeNow() {
+    public void getEventsToDateBeforeNow() throws DaoException {
         ((EventDao) dao).getEventsToDate(Date.from(
                 LocalDateTime.now().minusWeeks(1).atZone(ZoneId.systemDefault()).toInstant()));
     }
