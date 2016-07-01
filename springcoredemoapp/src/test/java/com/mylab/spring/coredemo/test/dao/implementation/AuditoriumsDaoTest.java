@@ -1,5 +1,6 @@
 package com.mylab.spring.coredemo.test.dao.implementation;
 
+import com.mylab.spring.coredemo.dao.AuditoriumDao;
 import com.mylab.spring.coredemo.dao.exception.DaoException;
 import com.mylab.spring.coredemo.dao.exception.EntityAlreadyExistsException;
 import com.mylab.spring.coredemo.dao.exception.EntityNotFoundException;
@@ -83,7 +84,7 @@ public class AuditoriumsDaoTest extends NamingDaoTest<Auditorium, AuditoriumDao>
     @Test(dependsOnMethods = "saveAuditorium",
             groups = {"gettersTests", "auditoriumGettersTests"},
             priority = 1)
-    public void getNumberOfSeats() {
+    public void getNumberOfSeats() throws DaoException {
         Assert.assertEquals(((AuditoriumDao) dao).getNumberOfSeats(entity.getId()),
                 entity.getNumberOfSeats(), "Number of seats doesn't match");
     }
@@ -91,7 +92,7 @@ public class AuditoriumsDaoTest extends NamingDaoTest<Auditorium, AuditoriumDao>
     @Test(dependsOnMethods = "saveAuditorium",
             groups = {"gettersTests", "auditoriumGettersTests", "bulkTests"},
             priority = 1)
-    public void getVipSeats() {
+    public void getVipSeats() throws DaoException {
         Assert.assertEquals(((AuditoriumDao) dao).getVipSeats(entity.getId()),
                 entity.getVipSeats(), "Vip seats doesn't match");
     }
