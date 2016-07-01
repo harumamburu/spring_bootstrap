@@ -2,6 +2,7 @@ package com.mylab.spring.coredemo.dao.memory;
 
 import com.mylab.spring.coredemo.dao.EventDao
         ;
+import com.mylab.spring.coredemo.dao.exception.IllegalDaoRequestException;
 import com.mylab.spring.coredemo.entity.Event;
 
 import java.util.Comparator;
@@ -33,14 +34,17 @@ public class MemoryEventDao extends AbstractNamingMemoryDao<Event> implements Ev
     }
 
     @Override
-    public List<Event> getEventsInRange(Date from, Date to) {
+    public List<Event> getEventsInRange(Date from, Date to) throws IllegalDaoRequestException {
+        if (from.after(to) || from.equals(to)) {
+            throw new IllegalDaoRequestException("Requested events' dates range is inconsistent");
+        }
         return EVENTS.values().parallelStream().filter(event -> event.getDate().after(from))
                 .filter(event -> event.getDate().before(to))
                 .sorted(Comparator.comparing(Event::getId)).collect(Collectors.toList());
     }
 
     @Override
-    public List<Event> getEventsToDate(Date to) {
+    public List<Event> getEventsToDate(Date to) throws IllegalDaoRequestException {
         return getEventsInRange(new Date(), to);
     }
 
