@@ -10,9 +10,10 @@ public class Ticket implements Entity {
 
     public Ticket() {}
 
-    public Ticket(Event event, Double price, Integer seat) {
+    public Ticket(Event event, User user, Integer seat) {
         this.event = event;
-        this.price = price;
+        this.user = user;
+        this.price = event.getBasePrice();
         this.seat = seat;
     }
 
@@ -69,7 +70,7 @@ public class Ticket implements Entity {
         if (!event.equals(ticket.event)) return false;
         if (!price.equals(ticket.price)) return false;
         if (!seat.equals(ticket.seat)) return false;
-        return user != null ? user.equals(ticket.user) : ticket.user == null;
+        return user.equals(ticket.user);
 
     }
 
@@ -79,7 +80,7 @@ public class Ticket implements Entity {
         result = 31 * result + event.hashCode();
         result = 31 * result + price.hashCode();
         result = 31 * result + seat.hashCode();
-        result = 31 * result + (user != null ? user.hashCode() : 0);
+        result = 31 * result + user.hashCode();
         return result;
     }
 
