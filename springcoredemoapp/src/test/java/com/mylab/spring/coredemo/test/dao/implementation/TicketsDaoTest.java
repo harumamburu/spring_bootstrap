@@ -126,24 +126,21 @@ public class TicketsDaoTest extends AbstractDaoTest<Ticket, TicketDao> implement
                 "There shouldn't be tickets for fake event");
     }
 
-    @Test(dependsOnMethods = "saveTicket",
-            groups = {"negativeTests", "gettersTests", "ticketGettersTests"},
+    @Test(groups = {"negativeTests", "gettersTests", "ticketGettersTests"},
             priority = 2,
             expectedExceptions = EntityNotFoundException.class)
     public void getNonExistingTicketById() throws DaoException {
         getNonExistingEntityById();
     }
 
-    @Test(dependsOnMethods = "saveTicket",
-            groups = {"deletingTests", "ticketDeletingTests", "negativeTests"},
+    @Test(groups = {"deletingTests", "ticketDeletingTests", "negativeTests"},
             priority = 3,
             expectedExceptions = EntityNotFoundException.class)
     public void deleteNonExistingTicket() throws DaoException {
         deleteNonExistingEntity();
     }
     
-    @Test(dependsOnMethods = "saveTicket",
-            groups = {"deletingTests", "ticketDeletingTests", "negativeTests"},
+    @Test(groups = {"deletingTests", "ticketDeletingTests", "negativeTests"},
             priority = 3,
             expectedExceptions = DaoException.class)
     public void deleteTicketWithNullId() throws DaoException {

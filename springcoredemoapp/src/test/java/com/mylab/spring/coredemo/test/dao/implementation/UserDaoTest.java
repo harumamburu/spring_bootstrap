@@ -52,16 +52,14 @@ public class UserDaoTest extends NamingDaoTest<User, UserDao> {
         Assert.assertEquals(((UserDao) dao).getUserByEmail(entity.getEmail()), entity, "Failed to get user by Email");
     }
 
-    @Test(dependsOnMethods = "saveUser",
-            groups = {"negativeTests", "saveTests", "userSaveTests"},
+    @Test(groups = {"negativeTests", "saveTests", "userSaveTests"},
             priority = 2,
             expectedExceptions = EntityAlreadyExistsException.class)
     public void saveUserWithUniqueNameViolated() throws DaoException {
         saveEntityWithUniqueNameViolated();
     }
 
-    @Test(dependsOnMethods = "saveUser",
-            groups = {"negativeTests", "saveTests", "userSaveTests"},
+    @Test(groups = {"negativeTests", "saveTests", "userSaveTests"},
             priority = 2,
             expectedExceptions = EntityAlreadyExistsException.class)
     public void saveUserWithUniqueEmailViolated() throws DaoException {
@@ -70,40 +68,35 @@ public class UserDaoTest extends NamingDaoTest<User, UserDao> {
         dao.saveEntity(entity);
     }
 
-    @Test(dependsOnMethods = "saveUser",
-            groups = {"negativeTests", "gettersTests", "userGettersTests"},
+    @Test(groups = {"negativeTests", "gettersTests", "userGettersTests"},
             priority = 2,
             expectedExceptions = EntityNotFoundException.class)
     public void getNonExistingUserById() throws DaoException {
         getNonExistingEntityById();
     }
 
-    @Test(dependsOnMethods = "saveUser",
-            groups = {"negativeTests", "gettersTests", "userGettersTests"},
+    @Test(groups = {"negativeTests", "gettersTests", "userGettersTests"},
             priority = 2,
             expectedExceptions = EntityNotFoundException.class)
     public void getNonExistingUserByName() throws DaoException {
         getNonExistingEntityByName();
     }
 
-    @Test(dependsOnMethods = "saveUser",
-            groups = {"negativeTests", "gettersTests", "userGettersTests"},
+    @Test(groups = {"negativeTests", "gettersTests", "userGettersTests"},
             priority = 2,
             expectedExceptions = EntityNotFoundException.class)
     public void getNonExistingUserByEmail() throws DaoException {
         ((UserDao) dao).getUserByEmail("");
     }
 
-    @Test(dependsOnMethods = "saveUser",
-            groups = {"deletingTests", "userDeletingTests", "negativeTests"},
+    @Test(groups = {"deletingTests", "userDeletingTests", "negativeTests"},
             priority = 3,
             expectedExceptions = EntityNotFoundException.class)
     public void deleteNonExistingUser() throws DaoException {
         deleteNonExistingEntity();
     }
 
-    @Test(dependsOnMethods = "saveUser",
-            groups = {"deletingTests", "userDeletingTests", "negativeTests"},
+    @Test(groups = {"deletingTests", "userDeletingTests", "negativeTests"},
             priority = 3,
             expectedExceptions = DaoException.class)
     public void deleteUserWithNullId() throws DaoException {
