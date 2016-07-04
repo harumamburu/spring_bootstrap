@@ -9,7 +9,7 @@ import org.testng.Assert;
 
 public abstract class AbstractDaoTest<T extends Entity, K extends Dao<T>> extends BaseTest {
 
-    protected Dao<T> dao;
+    protected K dao;
     protected T entity;
 
     // to be injected in concrete test-classes

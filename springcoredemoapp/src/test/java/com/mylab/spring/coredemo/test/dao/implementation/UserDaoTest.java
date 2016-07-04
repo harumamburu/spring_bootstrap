@@ -49,7 +49,7 @@ public class UserDaoTest extends NamingDaoTest<User, UserDao> {
             groups = {"gettersTests", "userGettersTest"},
             priority = 1)
     public void getUserByEmail() throws DaoException  {
-        Assert.assertEquals(((UserDao) dao).getUserByEmail(entity.getEmail()), entity, "Failed to get user by Email");
+        Assert.assertEquals(dao.getUserByEmail(entity.getEmail()), entity, "Failed to get user by Email");
     }
 
     @Test(groups = {"negativeTests", "saveTests", "userSaveTests"},
@@ -86,7 +86,7 @@ public class UserDaoTest extends NamingDaoTest<User, UserDao> {
             priority = 2,
             expectedExceptions = EntityNotFoundException.class)
     public void getNonExistingUserByEmail() throws DaoException {
-        ((UserDao) dao).getUserByEmail("");
+        dao.getUserByEmail("");
     }
 
     @Test(groups = {"deletingTests", "userDeletingTests", "negativeTests"},

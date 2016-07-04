@@ -78,14 +78,14 @@ public class AuditoriumsDaoTest extends NamingDaoTest<Auditorium, AuditoriumDao>
             groups = {"gettersTests", "auditoriumGettersTests", "bulkTests"},
             priority = 1)
     public void getAllEntities() {
-        Assert.assertEquals(((AuditoriumDao) dao).getAllEntities(), auditoriums, "Not all auditoriums match");
+        Assert.assertEquals(dao.getAllEntities(), auditoriums, "Not all auditoriums match");
     }
 
     @Test(dependsOnMethods = "saveAuditorium",
             groups = {"gettersTests", "auditoriumGettersTests"},
             priority = 1)
     public void getNumberOfSeats() throws DaoException {
-        Assert.assertEquals(((AuditoriumDao) dao).getNumberOfSeats(entity.getId()),
+        Assert.assertEquals(dao.getNumberOfSeats(entity.getId()),
                 entity.getNumberOfSeats(), "Number of seats doesn't match");
     }
 
@@ -93,7 +93,7 @@ public class AuditoriumsDaoTest extends NamingDaoTest<Auditorium, AuditoriumDao>
             groups = {"gettersTests", "auditoriumGettersTests", "bulkTests"},
             priority = 1)
     public void getVipSeats() throws DaoException {
-        Assert.assertEquals(((AuditoriumDao) dao).getVipSeats(entity.getId()),
+        Assert.assertEquals(dao.getVipSeats(entity.getId()),
                 entity.getVipSeats(), "Vip seats doesn't match");
     }
 
@@ -122,14 +122,14 @@ public class AuditoriumsDaoTest extends NamingDaoTest<Auditorium, AuditoriumDao>
             priority = 2,
             expectedExceptions = EntityNotFoundException.class)
     protected void getNonExistingAuditoriumSeatsNumber() throws DaoException {
-        ((AuditoriumDao) dao).getNumberOfSeats(Long.MAX_VALUE);
+        dao.getNumberOfSeats(Long.MAX_VALUE);
     }
 
     @Test(groups = {"negativeTests", "gettersTests", "auditoriumGettersTests", "bulkTests"},
             priority = 2,
             expectedExceptions = EntityNotFoundException.class)
     protected void getNonExistingAuditoriumVipSeats() throws DaoException {
-        ((AuditoriumDao) dao).getVipSeats(Long.MAX_VALUE);
+        dao.getVipSeats(Long.MAX_VALUE);
     }
 
     @Test(groups = {"deletingTests", "auditoriumDeletingTests", "negativeTests"},

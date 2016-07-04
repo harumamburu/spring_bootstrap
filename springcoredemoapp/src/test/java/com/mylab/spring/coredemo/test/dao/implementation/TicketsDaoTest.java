@@ -77,7 +77,7 @@ public class TicketsDaoTest extends AbstractDaoTest<Ticket, TicketDao> implement
             groups = {"gettersTests", "ticketGettersTests", "bulkTests"},
             priority = 1)
     public void getAllEntities() {
-        Assert.assertEquals(((TicketDao) dao).getAllEntities(), tickets,
+        Assert.assertEquals(dao.getAllEntities(), tickets,
                 "Returned tickets lists isn't equal to expected");
     }
 
@@ -85,7 +85,7 @@ public class TicketsDaoTest extends AbstractDaoTest<Ticket, TicketDao> implement
             groups = {"gettersTests", "ticketGettersTests", "bulkTests"},
             priority = 1)
     public void getTicketsForEvent() {
-        assertEqualListAndFilteredTickets(((TicketDao) dao).getTicketsForEvent(event),
+        assertEqualListAndFilteredTickets(dao.getTicketsForEvent(event),
                 ticket -> ticket.getEvent().equals(event),
                 "Returned tickets' events don't match");
     }
@@ -94,7 +94,7 @@ public class TicketsDaoTest extends AbstractDaoTest<Ticket, TicketDao> implement
             groups = {"gettersTests", "ticketGettersTests", "bulkTests"},
             priority = 1)
     public void getTicketsForUser() {
-        assertEqualListAndFilteredTickets(((TicketDao) dao).getTicketsForUser(user),
+        assertEqualListAndFilteredTickets(dao.getTicketsForUser(user),
                 ticket -> ticket.getUser().equals(user),
                 "Returned tickets' users don't match");
     }
@@ -111,7 +111,7 @@ public class TicketsDaoTest extends AbstractDaoTest<Ticket, TicketDao> implement
             priority = 1)
     public void getTicketsForNonExistingUser() {
         User newUser = new User("new_" + user.getName(), "new_" + user.getEmail());
-        assertEqualListAndFilteredTickets(((TicketDao) dao).getTicketsForUser(newUser),
+        assertEqualListAndFilteredTickets(dao.getTicketsForUser(newUser),
                 ticket -> ticket.getUser().equals(newUser),
                 "There shouldn't be tickets for fake user");
     }
@@ -121,7 +121,7 @@ public class TicketsDaoTest extends AbstractDaoTest<Ticket, TicketDao> implement
             priority = 1)
     public void getTicketsForNonExistingEvent() {
         Event newEvent = new Event("new_" + event.getName(), event.getDate(), event.getBasePrice() + 100500);
-        assertEqualListAndFilteredTickets(((TicketDao) dao).getTicketsForEvent(newEvent),
+        assertEqualListAndFilteredTickets(dao.getTicketsForEvent(newEvent),
                 ticket -> ticket.getEvent().equals(newEvent),
                 "There shouldn't be tickets for fake event");
     }

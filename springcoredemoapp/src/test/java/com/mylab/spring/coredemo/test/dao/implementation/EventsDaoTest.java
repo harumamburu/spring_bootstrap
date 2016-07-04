@@ -14,13 +14,9 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import javax.annotation.Resource;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -91,7 +87,7 @@ public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements Bul
             groups = {"gettersTests", "eventGettersTests", "bulkTests"},
             priority = 1)
     public void getEventsInRange() throws DaoException {
-        assertEqualListAndFilteredEvents(((EventDao) dao).getEventsInRange(from, to),
+        assertEqualListAndFilteredEvents(dao.getEventsInRange(from, to),
                 event -> event.getDate().after(from) && event.getDate().before(to));
     }
 
@@ -99,7 +95,7 @@ public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements Bul
             groups = {"gettersTests", "eventGettersTests", "bulkTests"},
             priority = 1)
     public void getEventsToDate() throws DaoException {
-        assertEqualListAndFilteredEvents(((EventDao) dao).getEventsInRange(new Date(), to),
+        assertEqualListAndFilteredEvents(dao.getEventsInRange(new Date(), to),
                 event -> event.getDate().after(new Date()) && event.getDate().before(to));
     }
 
@@ -107,7 +103,7 @@ public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements Bul
     public void getEventsInOldRange() throws DaoException {
         Date oldFrom = substractWeeks(from, 4);
         Date oldTo = substractWeeks(to, 4);
-        Assert.assertEquals(((EventDao) dao).getEventsInRange(oldFrom, oldTo), new ArrayList<Event>(0));
+        Assert.assertEquals(dao.getEventsInRange(oldFrom, oldTo), new ArrayList<Event>(0));
     }
 
     private Date substractWeeks(Date date, int weeks) {
@@ -125,7 +121,7 @@ public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements Bul
             groups = {"gettersTests", "eventGettersTests", "bulkTests"},
             priority = 1)
     public void getAllEntities() {
-        Assert.assertEquals(((EventDao) dao).getAllEntities(), events, "Not same events were returned");
+        Assert.assertEquals(dao.getAllEntities(), events, "Not same events were returned");
     }
 
     @Test(groups = {"negativeTests", "saveTests", "eventSaveTests"},
@@ -153,14 +149,14 @@ public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements Bul
             priority = 2,
             expectedExceptions = IllegalDaoRequestException.class)
     public void getEventsInBrokenRange() throws DaoException {
-        ((EventDao) dao).getEventsInRange(to, from);
+        dao.getEventsInRange(to, from);
     }
 
     @Test(groups = {"gettersTests", "eventGettersTests", "bulkTests", "negativeTests"},
             priority = 2,
             expectedExceptions = IllegalDaoRequestException.class)
     public void getEventsInNoRange() throws DaoException {
-        ((EventDao) dao).getEventsInRange(to, to);
+        dao.getEventsInRange(to, to);
     }
 
     @Test(groups = {"deletingTests", "eventDeletingTests", "negativeTests"},
