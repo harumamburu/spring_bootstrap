@@ -45,11 +45,6 @@ public class MemoryEventDao extends AbstractNamingMemoryDao<Event> implements Ev
     }
 
     @Override
-    public List<Event> getEventsToDate(Date to) throws IllegalDaoRequestException {
-        return getEventsInRange(new Date(), to);
-    }
-
-    @Override
     public List<Event> getAllEntities() {
         return EVENTS.values().parallelStream()
                 .sorted(Comparator.comparing(Event::getId))
