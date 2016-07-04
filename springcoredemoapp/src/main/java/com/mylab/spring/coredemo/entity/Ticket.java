@@ -100,13 +100,14 @@ public class Ticket implements Entity {
 
     @Override
     public String toString() {
-        return "Ticket{" +
-                "id=" + id +
-                ", event=" + event.getName() +
-                ", price=" + price +
-                ", discount=" + discount +
-                ", seat=" + seat +
-                ", user=" + user.getName() +
-                '}';
+        final StringBuffer sb = new StringBuffer("Ticket{");
+        sb.append("id=").append(id);
+        sb.append(", event=").append(event.getName());
+        sb.append(", price=").append(price);
+        sb.append(", discount=").append(discount);
+        sb.append(", seat=").append(seat);
+        sb.append(", user=").append(user.getName());
+        sb.append('}');
+        return sb.toString();
     }
 }

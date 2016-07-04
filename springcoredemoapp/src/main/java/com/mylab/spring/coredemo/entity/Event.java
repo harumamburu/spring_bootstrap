@@ -113,12 +113,15 @@ public class Event implements Entity, Named {
 
     @Override
     public String toString() {
-        return "Event{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", date=" + date +
-                ", basePrice=" + basePrice +
-                ", rating=" + rating +
-                '}';
+        final StringBuffer sb = new StringBuffer("Event{");
+        sb.append("id=").append(id);
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", date=").append(date);
+        sb.append(", basePrice=").append(basePrice);
+        sb.append(", rating=").append(rating);
+        sb.append(", auditorium=").append(auditorium);
+        sb.append(", tickets=").append(tickets);
+        sb.append('}');
+        return sb.toString();
     }
 }

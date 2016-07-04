@@ -52,6 +52,10 @@ public class Auditorium implements Entity, Named {
         return vipSeats;
     }
 
+    public void setVipSeats(List<Integer> vipSeats) {
+        this.vipSeats = vipSeats;
+    }
+
     public List<Event> getEvents() {
         return events;
     }
@@ -87,11 +91,13 @@ public class Auditorium implements Entity, Named {
 
     @Override
     public String toString() {
-        return "Auditorium{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", numberOfSeats=" + numberOfSeats +
-                ", vipSeats=" + vipSeats +
-                '}';
+        final StringBuffer sb = new StringBuffer("Auditorium{");
+        sb.append("id=").append(id);
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", numberOfSeats=").append(numberOfSeats);
+        sb.append(", vipSeats=").append(vipSeats);
+        sb.append(", events=").append(events);
+        sb.append('}');
+        return sb.toString();
     }
 }

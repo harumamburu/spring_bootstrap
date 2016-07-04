@@ -88,11 +88,13 @@ public class User implements Entity, Named{
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                birthDate != null ? ", birthDate=" + DateFormat.getDateInstance().format(birthDate) : "" +
-                ", email='" + email + '\'' +
-                '}';
+        final StringBuffer sb = new StringBuffer("User{");
+        sb.append("id=").append(id);
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", email='").append(email).append('\'');
+        sb.append(", birthDate=").append(birthDate != null ? DateFormat.getDateInstance().format(birthDate) : "null");
+        sb.append(", tickets=").append(tickets);
+        sb.append('}');
+        return sb.toString();
     }
 }
