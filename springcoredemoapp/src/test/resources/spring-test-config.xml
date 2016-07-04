@@ -104,4 +104,36 @@
 
     <bean id="auditoriumMemoryDao" class="com.mylab.spring.coredemo.dao.memory.MemoryAuditoriumDao"/>
 
+    <!-- Booking Dao Test Beans -->
+    <bean id="testBooking" class="com.mylab.spring.coredemo.entity.Booking" scope="prototype" lazy-init="true">
+        <constructor-arg>
+            <list>
+                <ref bean="testTicket"/>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="testBooking 2" class="com.mylab.spring.coredemo.entity.Booking" scope="prototype" lazy-init="true">
+        <constructor-arg>
+            <list>
+                <ref bean="testTicket 2"/>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="testBooking 3" class="com.mylab.spring.coredemo.entity.Booking" scope="prototype" lazy-init="true">
+        <constructor-arg>
+            <list>
+                <ref bean="testTicket 3"/>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <util:list id="bookingsList" list-class="com.mylab.spring.coredemo.entity.Booking" scope="prototype">
+        <ref bean="testBooking"/>
+        <ref bean="testBooking 2"/>
+        <ref bean="testBooking 3"/>
+    </util:list>
+
+    <bean id="bookingTestDao" class="com.mylab.spring.coredemo.dao.memory.MemoryBookingDao"/>
 </beans>
