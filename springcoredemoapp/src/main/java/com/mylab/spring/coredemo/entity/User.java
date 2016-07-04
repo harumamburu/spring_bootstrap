@@ -1,10 +1,18 @@
 package com.mylab.spring.coredemo.entity;
 
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 public class User implements Entity, Named{
 
     private Long id;
     private String name;
     private String email;
+    private Date birthDate;
+    // OneToMany
+    private List<Ticket> tickets = new ArrayList<>();
 
     public User() {}
 
@@ -33,12 +41,24 @@ public class User implements Entity, Named{
         this.name = name;
     }
 
+    public Date getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
+    }
+
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<Ticket> getTickets() {
+        return tickets;
     }
 
     @Override
@@ -50,7 +70,9 @@ public class User implements Entity, Named{
 
         if (id != null ? !id.equals(user.id) : user.id != null) return false;
         if (!name.equals(user.name)) return false;
-        return email.equals(user.email);
+        if (!email.equals(user.email)) return false;
+        if (birthDate != null ? !birthDate.equals(user.birthDate) : user.birthDate != null) return false;
+        return tickets.equals(user.tickets);
 
     }
 
@@ -59,6 +81,8 @@ public class User implements Entity, Named{
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + name.hashCode();
         result = 31 * result + email.hashCode();
+        result = 31 * result + (birthDate != null ? birthDate.hashCode() : 0);
+        result = 31 * result + tickets.hashCode();
         return result;
     }
 
@@ -67,6 +91,7 @@ public class User implements Entity, Named{
         return "User{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                birthDate != null ? ", birthDate=" + DateFormat.getDateInstance().format(birthDate) : "" +
                 ", email='" + email + '\'' +
                 '}';
     }

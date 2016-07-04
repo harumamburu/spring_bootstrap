@@ -2,7 +2,9 @@ package com.mylab.spring.coredemo.entity;
 
 import com.mylab.spring.coredemo.entity.enumeration.Rating;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Event implements Entity, Named {
 
@@ -11,6 +13,10 @@ public class Event implements Entity, Named {
     private Date date;
     private Double basePrice;
     private Rating rating;
+    // ManyToOne
+    private Auditorium auditorium;
+    // OneToMany
+    private List<Ticket> tickets = new ArrayList<>();
 
     public Event() {}
 
@@ -64,6 +70,18 @@ public class Event implements Entity, Named {
         this.rating = rating;
     }
 
+    public Auditorium getAuditorium() {
+        return auditorium;
+    }
+
+    public void setAuditorium(Auditorium auditorium) {
+        this.auditorium = auditorium;
+    }
+
+    public List<Ticket> getTickets() {
+        return tickets;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -75,7 +93,9 @@ public class Event implements Entity, Named {
         if (!name.equals(event.name)) return false;
         if (!date.equals(event.date)) return false;
         if (!basePrice.equals(event.basePrice)) return false;
-        return rating == event.rating;
+        if (rating != event.rating) return false;
+        if (auditorium != null ? !auditorium.equals(event.auditorium) : event.auditorium != null) return false;
+        return tickets.equals(event.tickets);
 
     }
 
@@ -85,7 +105,9 @@ public class Event implements Entity, Named {
         result = 31 * result + name.hashCode();
         result = 31 * result + date.hashCode();
         result = 31 * result + basePrice.hashCode();
-        result = 31 * result + (rating != null ? rating.hashCode() : 0);
+        result = 31 * result + rating.hashCode();
+        result = 31 * result + (auditorium != null ? auditorium.hashCode() : 0);
+        result = 31 * result + tickets.hashCode();
         return result;
     }
 

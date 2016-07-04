@@ -1,5 +1,6 @@
 package com.mylab.spring.coredemo.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Auditorium implements Entity, Named {
@@ -7,7 +8,10 @@ public class Auditorium implements Entity, Named {
     private Long id;
     private String name;
     private Integer numberOfSeats;
+    // OneToMany
     private List<Integer> vipSeats;
+    // OneToMany
+    private List<Event> events = new ArrayList<>();
 
     public Auditorium() {}
 
@@ -48,8 +52,12 @@ public class Auditorium implements Entity, Named {
         return vipSeats;
     }
 
-    public void setVipSeats(List<Integer> vipSeats) {
-        this.vipSeats = vipSeats;
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Event> events) {
+        this.events = events;
     }
 
     @Override
@@ -62,7 +70,8 @@ public class Auditorium implements Entity, Named {
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (!name.equals(that.name)) return false;
         if (!numberOfSeats.equals(that.numberOfSeats)) return false;
-        return vipSeats != null ? vipSeats.equals(that.vipSeats) : that.vipSeats == null;
+        if (!vipSeats.equals(that.vipSeats)) return false;
+        return events.equals(that.events);
 
     }
 
@@ -71,7 +80,8 @@ public class Auditorium implements Entity, Named {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + name.hashCode();
         result = 31 * result + numberOfSeats.hashCode();
-        result = 31 * result + (vipSeats != null ? vipSeats.hashCode() : 0);
+        result = 31 * result + vipSeats.hashCode();
+        result = 31 * result + events.hashCode();
         return result;
     }
 

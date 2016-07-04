@@ -3,9 +3,12 @@ package com.mylab.spring.coredemo.entity;
 public class Ticket implements Entity {
 
     private Long id;
+    // ManyToOne
     private Event event;
     private Double price;
+    private Double discount = 0.0d;
     private Integer seat;
+    // ManyToOne
     private User user;
 
     public Ticket() {}
@@ -51,6 +54,14 @@ public class Ticket implements Entity {
         this.seat = seat;
     }
 
+    public Double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Double discount) {
+        this.discount = discount;
+    }
+
     public User getUser() {
         return user;
     }
@@ -69,9 +80,11 @@ public class Ticket implements Entity {
         if (id != null ? !id.equals(ticket.id) : ticket.id != null) return false;
         if (!event.equals(ticket.event)) return false;
         if (!price.equals(ticket.price)) return false;
+        if (!discount.equals(ticket.discount)) return false;
         if (!seat.equals(ticket.seat)) return false;
-        return user.equals(ticket.user);
+        if (!user.equals(ticket.user)) return false;
 
+        return true;
     }
 
     @Override
@@ -79,6 +92,7 @@ public class Ticket implements Entity {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + event.hashCode();
         result = 31 * result + price.hashCode();
+        result = 31 * result + discount.hashCode();
         result = 31 * result + seat.hashCode();
         result = 31 * result + user.hashCode();
         return result;
@@ -90,6 +104,7 @@ public class Ticket implements Entity {
                 "id=" + id +
                 ", event=" + event.getName() +
                 ", price=" + price +
+                ", discount=" + discount +
                 ", seat=" + seat +
                 ", user=" + user.getName() +
                 '}';
