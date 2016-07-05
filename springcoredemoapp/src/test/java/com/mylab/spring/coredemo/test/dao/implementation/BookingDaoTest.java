@@ -44,9 +44,9 @@ public class BookingDaoTest extends AbstractDaoTest<Booking, BookingDao> {
 
     @DataProvider(name = "bookingsPopulator")
     private Iterator<Object[]> populateBookings() {
-        Iterator<Booking> internal = bookings.iterator();
-
         return new Iterator<Object[]>() {
+            Iterator<Booking> internal = bookings.iterator();
+
             @Override
             public boolean hasNext() {
                 return internal.hasNext();
@@ -62,7 +62,7 @@ public class BookingDaoTest extends AbstractDaoTest<Booking, BookingDao> {
 
     @Test(groups = {"saveTests", "bookingSaveTests"}, dataProvider = "bookingsPopulator")
     protected void saveBooking(Booking booking) throws DaoException {
-        entity = dao.saveEntity(entity);
+        entity = dao.saveEntity(booking);
         Assert.assertNotNull(entity, "Entity wasn't saved");
         Assert.assertNotNull(entity.getId(), "Id haven't been set");
     }
