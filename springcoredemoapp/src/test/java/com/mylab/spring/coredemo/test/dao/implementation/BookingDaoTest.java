@@ -63,8 +63,7 @@ public class BookingDaoTest extends AbstractDaoTest<Booking, BookingDao> {
     @Test(groups = {"saveTests", "bookingSaveTests"}, dataProvider = "bookingsPopulator")
     protected void saveBooking(Booking booking) throws DaoException {
         entity = dao.saveEntity(booking);
-        Assert.assertNotNull(entity, "Entity wasn't saved");
-        Assert.assertNotNull(entity.getId(), "Id haven't been set");
+        assertSaving(entity);
     }
 
     @Test(dependsOnMethods = "saveBooking",

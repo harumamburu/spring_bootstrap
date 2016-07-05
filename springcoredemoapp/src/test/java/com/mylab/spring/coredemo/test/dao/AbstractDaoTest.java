@@ -18,8 +18,7 @@ public abstract class AbstractDaoTest<T extends Entity, K extends Dao<T>> extend
 
     protected void saveEntity() throws DaoException {
         entity = dao.saveEntity(entity);
-        Assert.assertNotNull(entity, "Entity wasn't saved");
-        Assert.assertNotNull(entity.getId(), "Id haven't been set");
+        assertSaving(entity);
     }
 
     protected void getEntityById() throws DaoException {

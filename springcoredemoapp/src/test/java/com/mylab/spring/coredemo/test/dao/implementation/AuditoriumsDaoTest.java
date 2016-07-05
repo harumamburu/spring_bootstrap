@@ -55,8 +55,7 @@ public class AuditoriumsDaoTest extends NamingDaoTest<Auditorium, AuditoriumDao>
     @Test(groups = {"saveTests", "auditoriumsSaveTests"}, dataProvider = "auditoriumsPopulator")
     protected void saveAuditorium(Auditorium auditorium) throws DaoException {
         entity = dao.saveEntity(auditorium);
-        Assert.assertNotNull(entity, "Entity wasn't saved");
-        Assert.assertNotNull(entity.getId(), "Id haven't been set");
+        assertSaving(entity);
     }
 
     @Test(dependsOnMethods = "saveAuditorium",

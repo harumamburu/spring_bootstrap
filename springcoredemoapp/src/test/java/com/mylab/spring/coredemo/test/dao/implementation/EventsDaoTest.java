@@ -65,8 +65,7 @@ public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements Bul
             dataProvider = "eventsListPopulator")
     public void saveEvent(Event event) throws DaoException {
         entity = dao.saveEntity(event);
-        Assert.assertNotNull(entity, "Entity wasn't saved");
-        Assert.assertNotNull(entity.getId(), "Id haven't been set");
+        assertSaving(entity);
     }
 
     @Test(dependsOnMethods = "saveEvent",
