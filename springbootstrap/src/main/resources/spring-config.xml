@@ -10,8 +10,6 @@
 
     <context:annotation-config/>
 
-    <import resource="loggers.xml"/>
-    <import resource="properties.xml"/>
     <import resource="aspect-config.xml"/>
 
     <bean id="client" class="com.mylab.spring.bootstrap.client.Client"/>
