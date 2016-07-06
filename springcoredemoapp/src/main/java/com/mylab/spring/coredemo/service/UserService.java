@@ -16,7 +16,14 @@ public class UserService extends AbstractService {
     }
 
     public User remove(User user) throws DaoException {
-        return userDao.removeEntity(user);
+        User deleted = userDao.removeEntity(user);
+        bookingDao.getBookingsForUser(deleted).parallelStream().forEach(booking -> {
+            try {
+                bookingDao.removeEntity(booking);
+            } catch (DaoException e) {
+            }
+        });
+        return deleted;
     }
 
     public User getById(Long id) throws DaoException {
