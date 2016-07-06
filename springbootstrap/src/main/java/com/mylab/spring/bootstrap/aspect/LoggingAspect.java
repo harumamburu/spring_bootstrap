@@ -9,7 +9,6 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -19,7 +18,7 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 @Aspect
-public class LoggingAspect {
+public class LoggingAspect extends AbstractAspect {
 
     private Logger LOG;
     @Value("${logging.error.pattern}")
@@ -38,14 +37,11 @@ public class LoggingAspect {
         }
     }
 
-    @Pointcut("execution(* com.mylab.spring.bootstrap.logging.*.logEvent(com.mylab.spring.bootstrap.event.Event))")
-    private void allLogEventMethods() {};
-
-    @Pointcut("allLogEventMethods() && (within(com.mylab.spring.bootstrap.logging.*File*Logger)" +
+    @Pointcut("logEventMethods() && (within(com.mylab.spring.bootstrap.logging.*File*Logger)" +
             "|| within(com.mylab.spring.bootstrap.logging.*Cache*Logger))")
     private void allFileLogEventMethods() {};
 
-    @Before("allLogEventMethods()")
+    @Before("logEventMethods()")
     private void logBeforeEventLogging(JoinPoint joinPoint) {
         LOG.info("LOGGING EVENT AT: " +
                 joinPoint.getTarget().getClass().getSimpleName() + " " +
