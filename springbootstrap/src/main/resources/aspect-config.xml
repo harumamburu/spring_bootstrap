@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+                           http://www.springframework.org/schema/aop
+                           http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+
+    <import resource="properties.xml"/>
+
+    <aop:aspectj-autoproxy/>
+
+    <bean id="loggingAspect" class="com.mylab.spring.bootstrap.aspect.LoggingAspect"/>
+    <bean id="logger" class="java.util.logging.Logger" factory-method="getLogger"
+          c:_0="#{T(com.mylab.spring.bootstrap.aspect.LoggingAspect).class.getSimpleName()}"/>
+
+</beans>

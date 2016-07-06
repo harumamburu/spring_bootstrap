@@ -10,6 +10,8 @@
 
     <properties>
         <spring.ver>3.2.13.RELEASE</spring.ver>
+        <aspectj.ver>1.8.9</aspectj.ver>
+        <commonsio.ver>2.5</commonsio.ver>
     </properties>
 
     <dependencies>
@@ -37,8 +39,15 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>LATEST</version>
+            <version>${commonsio.ver}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${aspectj.ver}</version>
+        </dependency>
+
     </dependencies>
 
     <build>

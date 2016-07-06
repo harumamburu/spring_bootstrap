@@ -12,6 +12,7 @@
 
     <import resource="loggers.xml"/>
     <import resource="properties.xml"/>
+    <import resource="aspect-config.xml"/>
 
     <bean id="client" class="com.mylab.spring.bootstrap.client.Client"/>
 
@@ -28,7 +29,7 @@
                   factory-method="getDateTimeInstance"/>
             <!--creates an instance of Format from an abstract class' static method-->
         </constructor-arg>
-        <property name="type" value="INFO"/>
+        <property name="type" value="ERROR"/>
     </bean>
 
 </beans>
