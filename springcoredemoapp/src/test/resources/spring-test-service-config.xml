@@ -8,4 +8,7 @@
 
     <bean id="testingUserService" class="com.mylab.spring.coredemo.service.UserService"
           scope="prototype" lazy-init="true"/>
+
+    <bean id="testingBookingService" class="com.mylab.spring.coredemo.service.BookingService"
+          scope="prototype" lazy-init="true"/>
 </beans>
