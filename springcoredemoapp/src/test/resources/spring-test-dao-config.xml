@@ -72,13 +72,13 @@
           p:rating="HIGH"/>
 
     <bean id="testTicket" class="com.mylab.spring.coredemo.entity.Ticket" scope="prototype" lazy-init="true"
-          c:event="#{ticketTestEvent}" c:user="#{ticketTestUser}" c:seat="10"/>
+          c:event="#{ticketTestEvent}" c:seat="10" p:user="#{ticketTestUser}"/>
 
     <bean id="testTicket 2" class="com.mylab.spring.coredemo.entity.Ticket" scope="prototype" lazy-init="true"
-          c:event="#{testingEvent}" c:user="#{ticketTestUser}" c:seat="11"/>
+          c:event="#{testingEvent}" c:seat="11" p:user="#{ticketTestUser}"/>
 
     <bean id="testTicket 3" class="com.mylab.spring.coredemo.entity.Ticket" scope="prototype" lazy-init="true"
-          c:event="#{ticketTestEvent}" c:user="#{testUser}" c:seat="12"/>
+          c:event="#{ticketTestEvent}" c:seat="12" p:user="#{testUser}"/>
 
     <util:list id="ticketsList" scope="prototype" value-type="com.mylab.spring.coredemo.entity.Ticket">
         <ref bean="testTicket"/>

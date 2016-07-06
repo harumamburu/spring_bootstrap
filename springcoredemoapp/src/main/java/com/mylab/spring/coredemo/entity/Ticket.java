@@ -13,9 +13,8 @@ public class Ticket implements Entity {
 
     public Ticket() {}
 
-    public Ticket(Event event, User user, Integer seat) {
+    public Ticket(Event event, Integer seat) {
         this.event = event;
-        this.user = user;
         this.price = event.getBasePrice();
         this.seat = seat;
     }

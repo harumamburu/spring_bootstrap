@@ -155,7 +155,8 @@ public class TicketsDaoTest extends AbstractDaoTest<Ticket, TicketDao> implement
 
     @Override
     protected Ticket copyEntity(Ticket ticket) {
-        Ticket newTicket = new Ticket(ticket.getEvent(), ticket.getUser(), ticket.getSeat());
+        Ticket newTicket = new Ticket(ticket.getEvent(), ticket.getSeat());
+        newTicket.setUser(ticket.getUser());
         return newTicket;
     }
 }
