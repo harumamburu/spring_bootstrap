@@ -1,5 +1,6 @@
 package com.mylab.spring.bootstrap;
 
+import com.mylab.spring.bootstrap.aspect.StatisticAspect;
 import com.mylab.spring.bootstrap.client.Client;
 import com.mylab.spring.bootstrap.event.Event;
 import com.mylab.spring.bootstrap.event.EventType;
@@ -27,6 +28,9 @@ public class App {
         Event event = appContext.getBean("event", Event.class);
         event.setStringEvent("Event for user " + app.client.getId());
         app.logEvent(event);
+
+        StatisticAspect statistic = appContext.getBean("statisticAspect", StatisticAspect.class);
+        System.out.println(statistic.getCounters().toString());
 
         appContext.close();
     }
