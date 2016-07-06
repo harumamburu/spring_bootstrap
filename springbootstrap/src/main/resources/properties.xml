@@ -12,6 +12,7 @@
             <list>
                 <value>classpath:properties/client.properties</value>
                 <value>classpath:properties/logging.properties</value>
+                <value>classpath:properties/jdbc.properties</value>
             </list>
         </property>
         <property name="ignoreResourceNotFound" value="false"/>
