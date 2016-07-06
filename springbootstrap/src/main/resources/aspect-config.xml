@@ -13,5 +13,6 @@
 
     <bean id="loggingAspect" class="com.mylab.spring.bootstrap.aspect.LoggingAspect"/>
     <bean id="statisticAspect" class="com.mylab.spring.bootstrap.aspect.StatisticAspect"/>
+    <bean id="loggerRestrictingAspect" class="com.mylab.spring.bootstrap.aspect.LoggerRestrictingAspect"/>
 
 </beans>
