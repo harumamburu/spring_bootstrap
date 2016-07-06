@@ -12,6 +12,7 @@
         <spring.ver>3.2.13.RELEASE</spring.ver>
         <aspectj.ver>1.8.9</aspectj.ver>
         <commonsio.ver>2.5</commonsio.ver>
+        <derby.ver>10.12.1.1</derby.ver>
     </properties>
 
     <dependencies>
@@ -35,6 +36,11 @@
             <artifactId>spring-jdbc</artifactId>
             <version>${spring.ver}</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${spring.ver}</version>
+        </dependency>
 
         <dependency>
             <groupId>commons-io</groupId>
@@ -46,6 +52,12 @@
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
             <version>${aspectj.ver}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derby</artifactId>
+            <version>${derby.ver}</version>
         </dependency>
 
     </dependencies>
