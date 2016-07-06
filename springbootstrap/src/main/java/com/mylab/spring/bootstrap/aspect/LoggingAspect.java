@@ -44,7 +44,7 @@ public class LoggingAspect extends AbstractAspect {
     @Before("logEventMethods()")
     private void logBeforeEventLogging(JoinPoint joinPoint) {
         LOG.info("LOGGING EVENT AT: " +
-                joinPoint.getTarget().getClass().getSimpleName() + " " +
+                joinPoint.getTarget().getClass().getSimpleName() + "." +
                 joinPoint.getSignature().getName() + "()");
     }
 
