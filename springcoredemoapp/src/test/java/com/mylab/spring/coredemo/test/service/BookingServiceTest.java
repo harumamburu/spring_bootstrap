@@ -68,4 +68,14 @@ public class BookingServiceTest extends AbstractServiceTest<BookingService> {
         service.getTicketsForEventAt(event, date);
     }
 
+    @Test(dataProvider = "seatsProvider")
+    public void bookTicketForNonExistingUser(Integer seat) throws DaoException {
+        service.bookTicket(new User(), new Ticket(event, seat));
+    }
+
+    @Test(priority = 1)
+    public void getTicketsForNonExistingEvent() throws DaoException {
+        service.getTicketsForEventAt(new Event(), date);
+    }
+
 }
