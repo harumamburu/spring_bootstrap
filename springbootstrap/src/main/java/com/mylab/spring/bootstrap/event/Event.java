@@ -21,6 +21,14 @@ public class Event {
         id = RANDOMIZER.nextInt(Integer.MAX_VALUE);
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
     public String getStringEvent() {
         return event;
     }
