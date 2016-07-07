@@ -64,6 +64,6 @@ public class LoggingAspect extends AbstractAspect {
 
     @AfterThrowing(pointcut = "this(com.mylab.spring.bootstrap.logging.EventLogger)", throwing = "exc")
     private void logAfterLoggingException(RuntimeException exc) {
-        LOG.log(Level.WARNING, "!!! an error occurred while accessing event log file location info !!!", exc);
+        LOG.log(Level.WARNING, "AN ERROR OCCURRED WHILE ACCESSING EVENT LOG FILE LOCATION INFO", exc);
     }
 }
