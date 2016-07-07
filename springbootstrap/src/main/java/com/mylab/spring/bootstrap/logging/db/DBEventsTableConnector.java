@@ -10,6 +10,7 @@ import javax.annotation.PostConstruct;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.util.Date;
 
 public class DBEventsTableConnector {
 
@@ -46,7 +47,7 @@ public class DBEventsTableConnector {
         return template.queryForObject(selectEventByIdQuery, new Object[]{id}, new RowMapper<Event>() {
             @Override
             public Event mapRow(ResultSet resultSet, int i) throws SQLException {
-                Event result = new Event(resultSet.getDate(eventDateColumn),
+                Event result = new Event(new Date(resultSet.getTimestamp(eventDateColumn).getTime()),
                         DateFormat.getDateTimeInstance(), resultSet.getLong(eventIdColumn));
                 result.setStringEvent(resultSet.getString(eventMessageColumn));
                 result.setType(EventType.valueOf(resultSet.getString(eventTypeColumn)));

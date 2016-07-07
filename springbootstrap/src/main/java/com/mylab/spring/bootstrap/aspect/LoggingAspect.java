@@ -1,11 +1,14 @@
 package com.mylab.spring.bootstrap.aspect;
 
+import com.mylab.spring.bootstrap.event.Event;
+import com.mylab.spring.bootstrap.logging.db.DBEventsTableConnector;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.PostConstruct;
@@ -23,9 +26,11 @@ public class LoggingAspect extends AbstractAspect {
     private Logger LOG;
     @Value("${logging.error.pattern}")
     private String handlerPattern;
+    @Autowired
+    private DBEventsTableConnector connector;
 
     @PostConstruct
-    private void init() {
+    private void initSystemLogger() {
         LOG = Logger.getLogger(this.getClass().getSimpleName());
         try {
             FileHandler handler = new FileHandler(handlerPattern, true);
@@ -59,6 +64,18 @@ public class LoggingAspect extends AbstractAspect {
             LOG.info("LOGGED EVENT TO: " + log.getAbsolutePath());
         } catch (NoSuchFieldException | IllegalAccessException exc) {
             throw new RuntimeException(exc);
+        }
+    }
+
+    @AfterReturning("logEventMethods() && within(com.mylab.spring.bootstrap.logging.*.DBLogger) && args(event)")
+    private void logAfterDbLogging(Object event) {
+        if (event instanceof Event) {
+            Event logged = connector.selectEvent(((Event) event).getId());
+            if (!logged.equals(event)) {
+                LOG.warning("PERSISTED WRONG EVENT TO DB: " + logged.toString());
+            } else {
+                LOG.info("LOGGED TO DB: " + logged.toString());
+            }
         }
     }
 
