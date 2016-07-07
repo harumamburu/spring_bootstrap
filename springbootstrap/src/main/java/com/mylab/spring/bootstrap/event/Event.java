@@ -21,6 +21,12 @@ public class Event {
         id = RANDOMIZER.nextInt(Integer.MAX_VALUE);
     }
 
+    public Event(Date creationDate, DateFormat dateFormat, long id) {
+        this.creationDate = creationDate;
+        this.dateFormat = dateFormat;
+        this.id = id;
+    }
+
     public long getId() {
         return id;
     }
