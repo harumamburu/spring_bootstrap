@@ -47,6 +47,9 @@
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate" lazy-init="true"
           c:_0-ref="dataSource"/>
 
-    <bean id="dbLogger" class="com.mylab.spring.bootstrap.logging.DBLogger" c:template-ref="jdbcTemplate"/>
+    <bean id="dbLogger" class="com.mylab.spring.bootstrap.logging.DBLogger"
+          c:template-ref="jdbcTemplate"
+          c:createTableQuery="${jdbc.createtable.query}"
+          c:insertEventQuery="${jdbc.insertevent.query}"/>
 
 </beans>
