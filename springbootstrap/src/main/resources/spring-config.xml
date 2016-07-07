@@ -14,7 +14,8 @@
 
     <bean id="client" class="com.mylab.spring.bootstrap.client.Client"/>
 
-    <bean id="app" class="com.mylab.spring.bootstrap.App" c:client-ref="client" c:loggers-ref="loggersMap"/>
+    <bean id="app" class="com.mylab.spring.bootstrap.App"
+          c:client-ref="client" c:loggers-ref="loggersMap" c:logger-ref="dbLogger"/>
 
     <bean id="event" class="com.mylab.spring.bootstrap.event.Event" scope="prototype" lazy-init="true">
         <!-- constructor bean injection -->

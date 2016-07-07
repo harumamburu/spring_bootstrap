@@ -14,10 +14,12 @@ public class App {
 
     private final Client client;
     private final Map<EventType, EventLogger> loggers;
+    private final EventLogger backupLogger;
 
-    private App(Client client, Map<EventType, EventLogger> loggers) {
+    private App(Client client, Map<EventType, EventLogger> loggers, EventLogger logger) {
         this.client = client;
         this.loggers = loggers;
+        backupLogger = logger;
     }
 
     public static void main(String[] args) {
@@ -38,5 +40,6 @@ public class App {
     private void logEvent(Event event) {
         event.setStringEvent(event.getStringEvent().replaceAll(String.valueOf(client.getId()), client.getFullName()));
         loggers.get(event.getType()).logEvent(event);
+        backupLogger.logEvent(event);
     }
 }
