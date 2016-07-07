@@ -57,4 +57,29 @@ public class Event {
                 Optional.ofNullable(type).map(Enum::name).orElse("Event"),
                 id, event, dateFormat.format(creationDate));
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Event event1 = (Event) o;
+
+        if (id != event1.id) return false;
+        if (!creationDate.equals(event1.creationDate)) return false;
+        if (!dateFormat.equals(event1.dateFormat)) return false;
+        if (!event.equals(event1.event)) return false;
+        return type == event1.type;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + creationDate.hashCode();
+        result = 31 * result + dateFormat.hashCode();
+        result = 31 * result + event.hashCode();
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        return result;
+    }
 }
