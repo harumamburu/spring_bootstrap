@@ -119,7 +119,7 @@ public class Event implements Entity, Named {
         sb.append(", date=").append(date);
         sb.append(", basePrice=").append(basePrice);
         sb.append(", rating=").append(rating);
-        sb.append(", auditorium=").append(auditorium);
+        sb.append(", auditorium=").append(auditorium.getName());
         sb.append(", tickets=").append(tickets);
         sb.append('}');
         return sb.toString();
