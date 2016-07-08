@@ -26,7 +26,7 @@
           c:name="Denomination!" c:basePrice="500.0"
           c:date="#{T(java.util.Date).from(T(java.time.LocalDateTime).now().plusDays(1)
                     .atZone(T(java.time.ZoneId).systemDefault()).toInstant())}"
-          p:rating="LOW"/>
+          p:rating="LOW" p:auditorium="#{testAuditorium}"/>
 
     <util:list id="eventsList" scope="prototype" value-type="com.mylab.spring.coredemo.entity.Event">
         <ref bean="testingEvent"/>

@@ -1,6 +1,10 @@
 package com.mylab.spring.coredemo.test.service;
 
+import com.mylab.spring.coredemo.dao.AuditoriumDao;
+import com.mylab.spring.coredemo.dao.EventDao;
+import com.mylab.spring.coredemo.dao.UserDao;
 import com.mylab.spring.coredemo.dao.exception.DaoException;
+import com.mylab.spring.coredemo.dao.exception.EntityAlreadyExistsException;
 import com.mylab.spring.coredemo.dao.exception.EntityNotFoundException;
 import com.mylab.spring.coredemo.dao.exception.IllegalDaoRequestException;
 import com.mylab.spring.coredemo.entity.Event;
@@ -10,11 +14,13 @@ import com.mylab.spring.coredemo.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import javax.annotation.Resource;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.List;
@@ -26,25 +32,38 @@ public class BookingServiceTest extends AbstractServiceTest<BookingService> {
     private User user;
     @Resource(name = "testingEvent")
     private Event event;
-    @Autowired
-    private List<Integer> seats;
 
-    @Value("test.event.date")
+    @Autowired
+    private UserDao userDao;
+    @Autowired
+    private AuditoriumDao auditoriumDao;
+    @Autowired
+    private EventDao eventDao;
+
+    @Value("#{'${test.bookingserv.ticket.seats}'.split(',')}")
+    private List<Integer> seats;
+    @Value("${test.bookingserv.dateformat}")
+    private String dateFormat;
+    @Value("${test.bookingserv.timeformat}")
+    private String timeFormat;
     private String date;
-    @Value("test.event.time")
     private String time;
-    @Value("test.event.price")
     private Double price;
 
     @DataProvider(name = "seatsProvider")
     private Iterator<Object[]> provideSeats() {
         return new Iterator<Object[]>() {
-            Iterator<Integer> internal;
+            Iterator<Integer> internal = seats.iterator();
+            // skip one seat to be able to check booking fof non-existing user
+            {
+                if (internal.hasNext()) {
+                    internal.next();
+                }
+            }
             @Override
             public boolean hasNext() {
                 return internal.hasNext();
             }
-
             @Override
             public Object[] next() {
                 return new Object[] { internal.next() };
@@ -58,6 +77,24 @@ public class BookingServiceTest extends AbstractServiceTest<BookingService> {
         this.service = service;
     }
 
+    @BeforeClass
+    private void setDateTimeStrings() {
+        date = DateTimeFormatter.ofPattern(dateFormat).format(event.getDate().toInstant().atZone(ZoneId.systemDefault()));
+        time = DateTimeFormatter.ofPattern(timeFormat).format(event.getDate().toInstant().atZone(ZoneId.systemDefault()));
+    }
+
+    @BeforeClass
+    private void setEventPrice() {
+        price = event.getBasePrice();
+    }
+
+    @BeforeClass
+    private void persistDependencies() throws DaoException {
+        auditoriumDao.saveEntity(event.getAuditorium());
+        userDao.saveEntity(user);
+        eventDao.saveEntity(event);
+    }
+
 
     @Test(dataProvider = "seatsProvider")
     public void bookTicket(Integer seat) throws DaoException {
@@ -65,7 +102,7 @@ public class BookingServiceTest extends AbstractServiceTest<BookingService> {
     }
 
     @Test(priority = 1)
-    public void getTicketPrice() {
+    public void getTicketPrice() throws DaoException {
         Assert.assertEquals(service.getTicketPrice(event, date, time, seats, user), price, "event's Price doesn't match");
     }
 
@@ -81,7 +118,7 @@ public class BookingServiceTest extends AbstractServiceTest<BookingService> {
 
     @Test(priority = 1, expectedExceptions = EntityNotFoundException.class)
     public void getTicketsEventAndDateDontMatch() throws DaoException {
-        service.getTicketsForEventAt(event, DateTimeFormatter.ofPattern("M/e/y").format(LocalDate.now()));
+        service.getTicketsForEventAt(event, DateTimeFormatter.ofPattern(dateFormat).format(LocalDate.now()));
     }
 
     @Test(priority = 1, expectedExceptions = EntityNotFoundException.class)
@@ -92,6 +129,11 @@ public class BookingServiceTest extends AbstractServiceTest<BookingService> {
     @Test(priority = 1, expectedExceptions = IllegalDaoRequestException.class)
     public void bookTicketForSeatOutOfAuditoriumsRange() throws DaoException {
         service.bookTicket(user, new Ticket(event, event.getAuditorium().getNumberOfSeats() + 1));
+    }
+
+    @Test(priority = 2, expectedExceptions = EntityAlreadyExistsException.class)
+    public void bookAlreadyBookedTicket() throws DaoException {
+        service.bookTicket(user, new Ticket(event, seats.get(1)));
     }
 
 }
