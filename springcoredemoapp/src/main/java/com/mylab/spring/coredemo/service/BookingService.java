@@ -39,7 +39,7 @@ public class BookingService extends AbstractService {
     }
 
     public List<Ticket> getTicketsForEventAt(Event event, String date) throws DaoException {
-        Event confirmedEvent = null;
+        Event confirmedEvent;
         if (event.getId() != null) {
             confirmedEvent = eventDao.getEntityById(event.getId());
         } else {
