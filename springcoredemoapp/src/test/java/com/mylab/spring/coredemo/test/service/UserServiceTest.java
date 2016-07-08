@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Test(groups = "usersServiceTest")
 @Listeners(EntryPointMethodInvocationListener.class)
 public class UserServiceTest extends AbstractServiceTest<UserService> implements EntryPointConfiguration {
 
@@ -37,7 +38,7 @@ public class UserServiceTest extends AbstractServiceTest<UserService> implements
     }
 
 
-    @Test(groups = {"serviceTests", "userServiceTests"})
+    @Test
     @EntryPoint
     public void registerUser() throws DaoException {
         user = service.register(user);
@@ -61,20 +62,17 @@ public class UserServiceTest extends AbstractServiceTest<UserService> implements
                 });
     }
 
-    @Test(groups = {"serviceTests", "userServiceTests"},
-            priority = 1)
+    @Test(priority = 1)
     public void getUserById() throws DaoException {
         assertEqualToUser(service.getById(user.getId()));
     }
 
-    @Test(groups = {"serviceTests", "userServiceTests"},
-            priority = 1)
+    @Test(priority = 1)
     public void getUserByName() throws DaoException {
         assertEqualToUser(service.getByName(user.getName()));
     }
 
-    @Test(groups = {"serviceTests", "userServiceTests"},
-            priority = 1)
+    @Test(priority = 1)
     public void getUserByEmail() throws DaoException {
         assertEqualToUser(service.getByEmail(user.getEmail()));
     }
@@ -83,24 +81,21 @@ public class UserServiceTest extends AbstractServiceTest<UserService> implements
         Assert.assertEquals(userToAssert, user, "Not same user was return");
     }
 
-    @Test(groups = {"serviceTests", "userServiceTests"},
-            priority = 1)
+    @Test(priority = 1)
     public void getBookedTicketsForUser() throws DaoException {
         Assert.assertEquals(service.getBookedTickets(user),
                 bookings.parallelStream().filter(booking ->booking.getUser().equals(user))
-                        .flatMap(booking -> booking.getTickets().parallelStream())
+                        .map(booking -> booking.getTicket())
                         .collect(Collectors.toList()),
                 "Not all booked tickets were returned");
     }
 
-    @Test(groups = {"serviceTests", "userServiceTests"},
-            priority = 2)
+    @Test(priority = 2)
     public void removeUserTest() throws DaoException {
         Assert.assertEquals(service.remove(user), user);
     }
 
-    @Test(groups = {"serviceTests", "userServiceTests"},
-            priority = 3)
+    @Test(priority = 3)
     public void getBookingsForRemovedUser() throws DaoException {
         Assert.assertEquals(service.getBookedTickets(user), new ArrayList<Ticket>(0));
     }

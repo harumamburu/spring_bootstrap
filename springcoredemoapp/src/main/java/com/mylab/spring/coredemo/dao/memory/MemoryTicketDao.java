@@ -40,11 +40,6 @@ public class MemoryTicketDao extends AbstractMemoryDao<Ticket> implements Ticket
         return  collectByPredicate(ticket -> ticket.getEvent().equals(event));
     }
 
-    @Override
-    public List<Ticket> getTicketsForUser(User user) {
-        return  collectByPredicate(ticket -> ticket.getUser().equals(user));
-    }
-
     private List<Ticket> collectByPredicate(Predicate<? super Ticket> predicate) {
         return TICKETS.values().parallelStream().filter(predicate).collect(Collectors.toList());
     }

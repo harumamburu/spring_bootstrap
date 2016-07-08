@@ -9,7 +9,6 @@ import com.mylab.spring.coredemo.entity.User;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
 import java.util.List;
 
 public class BookingService extends AbstractService {
@@ -19,7 +18,6 @@ public class BookingService extends AbstractService {
     getTicketsForEvent(event, date) - get all purchased tickets for event for specific date*/
 
     public void bookTicket(User user, Ticket ticket) throws DaoException {
-        ticket.setUser(user);
         User confirmedUser = null;
         try {
             if (user.getId() != null) {
@@ -30,8 +28,7 @@ public class BookingService extends AbstractService {
         } catch (DaoException exc){}
 
         if (confirmedUser != null) {
-            ticket.setUser(confirmedUser);
-            bookingDao.saveEntity(new Booking(Collections.singletonList(ticket)));
+            bookingDao.saveEntity(new Booking(ticket, user));
         }
 
         ticketDao.saveEntity(ticket);

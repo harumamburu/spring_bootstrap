@@ -9,5 +9,4 @@ import java.util.List;
 public interface TicketDao extends Dao<Ticket>, BulkDao<Ticket> {
 
     List<Ticket> getTicketsForEvent(Event event);
-    List<Ticket> getTicketsForUser(User user);
 }

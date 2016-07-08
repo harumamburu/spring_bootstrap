@@ -40,7 +40,6 @@ public class UserService extends AbstractService {
 
     public List<Ticket> getBookedTickets(User user) throws DaoException {
         return bookingDao.getBookingsForUser(user).parallelStream()
-                .flatMap(booking -> booking.getTickets().parallelStream()).collect(Collectors.toList());
-        // get streams of bookings' ticket lists flattened to one single stream and collect it as list
+                .map(booking -> booking.getTicket()).collect(Collectors.toList());
     }
 }

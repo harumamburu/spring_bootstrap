@@ -19,14 +19,13 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+@Test(groups = "ticketDaoTest")
 public class TicketsDaoTest extends AbstractDaoTest<Ticket, TicketDao> implements BulkDaoTest<Ticket, TicketDao> {
 
     @Autowired
     private List<Ticket> tickets;
     @Resource(name = "ticketTestEvent")
     private Event event;
-    @Resource(name = "ticketTestUser")
-    private User user;
 
     @DataProvider(name = "ticketsPopulator")
     private Iterator<Object[]> populateTickets() {
@@ -58,44 +57,29 @@ public class TicketsDaoTest extends AbstractDaoTest<Ticket, TicketDao> implement
     }
 
 
-    @Test(groups = {"saveTests", "ticketsSaveTests"}, dataProvider = "ticketsPopulator")
+    @Test(dataProvider = "ticketsPopulator")
     public void saveTicket(Ticket ticket) throws DaoException {
         entity = dao.saveEntity(ticket);
         assertSaving(entity);
     }
 
-    @Test(dependsOnMethods = "saveTicket",
-            groups = {"gettersTests", "ticketGettersTests"},
-            priority = 1)
+    @Test(dependsOnMethods = "saveTicket", priority = 1)
     public void getTicketById() throws DaoException {
         getEntityById();
     }
 
     @Override
-    @Test(dependsOnMethods = "saveTicket",
-            groups = {"gettersTests", "ticketGettersTests", "bulkTests"},
-            priority = 1)
+    @Test(dependsOnMethods = "saveTicket", priority = 1)
     public void getAllEntities() {
         Assert.assertEquals(dao.getAllEntities(), tickets,
                 "Returned tickets lists isn't equal to expected");
     }
 
-    @Test(dependsOnMethods = "saveTicket",
-            groups = {"gettersTests", "ticketGettersTests", "bulkTests"},
-            priority = 1)
+    @Test(dependsOnMethods = "saveTicket", priority = 1)
     public void getTicketsForEvent() {
         assertEqualListAndFilteredTickets(dao.getTicketsForEvent(event),
                 ticket -> ticket.getEvent().equals(event),
                 "Returned tickets' events don't match");
-    }
-
-    @Test(dependsOnMethods = "saveTicket",
-            groups = {"gettersTests", "ticketGettersTests", "bulkTests"},
-            priority = 1)
-    public void getTicketsForUser() {
-        assertEqualListAndFilteredTickets(dao.getTicketsForUser(user),
-                ticket -> ticket.getUser().equals(user),
-                "Returned tickets' users don't match");
     }
 
     private void assertEqualListAndFilteredTickets(List<Ticket> ticketsToAssert,
@@ -105,19 +89,7 @@ public class TicketsDaoTest extends AbstractDaoTest<Ticket, TicketDao> implement
                 tickets.parallelStream().filter(filterPredicate).collect(Collectors.toList()), message);
     }
 
-    @Test(dependsOnMethods = "saveTicket",
-            groups = {"gettersTests", "ticketGettersTests", "bulkTests"},
-            priority = 1)
-    public void getTicketsForNonExistingUser() {
-        User newUser = new User("new_" + user.getName(), "new_" + user.getEmail());
-        assertEqualListAndFilteredTickets(dao.getTicketsForUser(newUser),
-                ticket -> ticket.getUser().equals(newUser),
-                "There shouldn't be tickets for fake user");
-    }
-
-    @Test(dependsOnMethods = "saveTicket",
-            groups = {"gettersTests", "ticketGettersTests", "bulkTests"},
-            priority = 1)
+    @Test(dependsOnMethods = "saveTicket", priority = 1)
     public void getTicketsForNonExistingEvent() {
         Event newEvent = new Event("new_" + event.getName(), event.getDate(), event.getBasePrice() + 100500);
         assertEqualListAndFilteredTickets(dao.getTicketsForEvent(newEvent),
@@ -125,38 +97,32 @@ public class TicketsDaoTest extends AbstractDaoTest<Ticket, TicketDao> implement
                 "There shouldn't be tickets for fake event");
     }
 
-    @Test(groups = {"negativeTests", "gettersTests", "ticketGettersTests"},
-            priority = 2,
-            expectedExceptions = EntityNotFoundException.class)
+    @Test(priority = 2, expectedExceptions = EntityNotFoundException.class)
     public void getNonExistingTicketById() throws DaoException {
         getNonExistingEntityById();
     }
 
-    @Test(groups = {"deletingTests", "ticketDeletingTests", "negativeTests"},
-            priority = 3,
-            expectedExceptions = EntityNotFoundException.class)
+    @Test(priority = 3, expectedExceptions = EntityNotFoundException.class)
     public void deleteNonExistingTicket() throws DaoException {
         deleteNonExistingEntity();
     }
     
-    @Test(groups = {"deletingTests", "ticketDeletingTests", "negativeTests"},
-            priority = 3,
-            expectedExceptions = DaoException.class)
+    @Test(priority = 3, expectedExceptions = DaoException.class)
     public void deleteTicketWithNullId() throws DaoException {
         deleteEntityWithNullId();
     }
 
-    @Test(dependsOnMethods = "saveTicket",
-            groups = {"deletingTests", "ticketDeletingTests"},
-            priority = 4)
-    public void deleteTicket() throws DaoException {
+    @Test(dependsOnMethods = { "getTicketById", "getAllEntities", "getTicketsForEvent" }, priority = 4,
+            dataProvider = "ticketsPopulator")
+    public void deleteTicket(Ticket ticket) throws DaoException {
+        entity = ticket;
         deleteEntity();
     }
+
 
     @Override
     protected Ticket copyEntity(Ticket ticket) {
         Ticket newTicket = new Ticket(ticket.getEvent(), ticket.getSeat());
-        newTicket.setUser(ticket.getUser());
         return newTicket;
     }
 }

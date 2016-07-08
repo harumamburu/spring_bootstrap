@@ -1,23 +1,16 @@
 package com.mylab.spring.coredemo.entity;
 
-import java.util.List;
-
 public class Booking implements Entity {
 
     private Long id;
-    // ManyToOne
     private User user;
-    // ManyToOne
-    private Event event;
-    // OneToMany
-    private List<Ticket> tickets;
+    private Ticket ticket;
 
     public Booking() {}
 
-    public Booking(List<Ticket> tickets) {
-        this.user = tickets.get(0).getUser();
-        this.event = tickets.get(0).getEvent();
-        this.tickets = tickets;
+    public Booking(Ticket ticket, User user) {
+        this.user = user;
+        this.ticket = ticket;
     }
 
     @Override
@@ -38,20 +31,12 @@ public class Booking implements Entity {
         this.user = user;
     }
 
-    public Event getEvent() {
-        return event;
+    public Ticket getTicket() {
+        return ticket;
     }
 
-    public void setEvent(Event event) {
-        this.event = event;
-    }
-
-    public List<Ticket> getTickets() {
-        return tickets;
-    }
-
-    public void setTickets(List<Ticket> tickets) {
-        this.tickets = tickets;
+    public void setTicket(Ticket ticket) {
+        this.ticket = ticket;
     }
 
     @Override
@@ -63,8 +48,7 @@ public class Booking implements Entity {
 
         if (id != null ? !id.equals(booking.id) : booking.id != null) return false;
         if (!user.equals(booking.user)) return false;
-        if (!event.equals(booking.event)) return false;
-        return tickets.equals(booking.tickets);
+        return ticket.equals(booking.ticket);
 
     }
 
@@ -72,8 +56,7 @@ public class Booking implements Entity {
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + user.hashCode();
-        result = 31 * result + event.hashCode();
-        result = 31 * result + tickets.hashCode();
+        result = 31 * result + ticket.hashCode();
         return result;
     }
 
@@ -81,9 +64,9 @@ public class Booking implements Entity {
     public String toString() {
         final StringBuffer sb = new StringBuffer("Booking{");
         sb.append("id=").append(id);
-        sb.append(", tickets=").append(tickets.size());
+        sb.append(", ticket=").append(ticket.getSeat());
         sb.append(", user=").append(user.getName());
-        sb.append(", event=").append(event.getName());
+        sb.append(", event=").append(ticket.getEvent().getName());
         sb.append('}');
         return sb.toString();
     }

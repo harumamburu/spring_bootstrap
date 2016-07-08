@@ -43,7 +43,7 @@ public class MemoryBookingDao extends AbstractMemoryDao<Booking> implements Book
         if (event == null) {
             throw new IllegalDaoRequestException("Event can't be null");
         }
-        return getFilteredValues(booking -> booking.getEvent().equals(event));
+        return getFilteredValues(booking -> booking.getTicket().getEvent().equals(event));
     }
 
     @Override
@@ -51,7 +51,7 @@ public class MemoryBookingDao extends AbstractMemoryDao<Booking> implements Book
         if (event == null || user == null) {
             throw new IllegalDaoRequestException("Parameters can't be null");
         }
-        return getFilteredValues(booking -> booking.getEvent().equals(event) && booking.getUser().equals(user));
+        return getFilteredValues(booking -> booking.getTicket().getEvent().equals(event) && booking.getUser().equals(user));
     }
 
     private List<Booking> getFilteredValues(Predicate<Booking> filter) {
@@ -63,7 +63,8 @@ public class MemoryBookingDao extends AbstractMemoryDao<Booking> implements Book
 
     @Override
     protected boolean isSavedAlready(Booking entity) {
-        return BOOKINGS.values().parallelStream().anyMatch(booking -> booking.getUser().equals(entity.getUser()) &&
-                booking.getEvent().equals(entity.getEvent()) && booking.getTickets().contains(entity.getTickets()));
+        return BOOKINGS.values().parallelStream()
+                .anyMatch(booking -> booking.getUser().equals(entity.getUser()) &&
+                booking.getTicket().equals(entity.getTicket()));
     }
 }
