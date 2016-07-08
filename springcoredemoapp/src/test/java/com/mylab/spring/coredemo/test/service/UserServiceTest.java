@@ -20,7 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Test(groups = "usersServiceTest")
+// unable to mark as @Test since entryPointTailingConfiguration
+// will be counted as s test then
 @Listeners(EntryPointMethodInvocationListener.class)
 public class UserServiceTest extends AbstractServiceTest<UserService> implements EntryPointConfiguration {
 
@@ -38,7 +39,7 @@ public class UserServiceTest extends AbstractServiceTest<UserService> implements
     }
 
 
-    @Test
+    @Test(groups = "usersServiceTest")
     @EntryPoint
     public void registerUser() throws DaoException {
         user = service.register(user);
@@ -62,17 +63,17 @@ public class UserServiceTest extends AbstractServiceTest<UserService> implements
                 });
     }
 
-    @Test(priority = 1)
+    @Test(groups = "usersServiceTest", priority = 1, dependsOnMethods = "registerUser")
     public void getUserById() throws DaoException {
         assertEqualToUser(service.getById(user.getId()));
     }
 
-    @Test(priority = 1)
+    @Test(groups = "usersServiceTest", priority = 1, dependsOnMethods = "registerUser")
     public void getUserByName() throws DaoException {
         assertEqualToUser(service.getByName(user.getName()));
     }
 
-    @Test(priority = 1)
+    @Test(groups = "usersServiceTest", priority = 1, dependsOnMethods = "registerUser")
     public void getUserByEmail() throws DaoException {
         assertEqualToUser(service.getByEmail(user.getEmail()));
     }
@@ -81,7 +82,7 @@ public class UserServiceTest extends AbstractServiceTest<UserService> implements
         Assert.assertEquals(userToAssert, user, "Not same user was return");
     }
 
-    @Test(priority = 1)
+    @Test(groups = "usersServiceTest", priority = 1, dependsOnMethods = "registerUser")
     public void getBookedTicketsForUser() throws DaoException {
         Assert.assertEquals(service.getBookedTickets(user),
                 bookings.parallelStream().filter(booking ->booking.getUser().equals(user))
@@ -90,12 +91,12 @@ public class UserServiceTest extends AbstractServiceTest<UserService> implements
                 "Not all booked tickets were returned");
     }
 
-    @Test(priority = 2)
+    @Test(groups = "usersServiceTest", priority = 2, dependsOnMethods = "registerUser")
     public void removeUserTest() throws DaoException {
         Assert.assertEquals(service.remove(user), user);
     }
 
-    @Test(priority = 3)
+    @Test(groups = "usersServiceTest", priority = 3, dependsOnMethods = "removeUserTest")
     public void getBookingsForRemovedUser() throws DaoException {
         Assert.assertEquals(service.getBookedTickets(user), new ArrayList<Ticket>(0));
     }
@@ -103,7 +104,7 @@ public class UserServiceTest extends AbstractServiceTest<UserService> implements
 
     @AfterClass(alwaysRun = true)
     private void deleteAllBookings() {
-        bookings.parallelStream().forEach(booking -> {
+        bookings.parallelStream().filter(booking -> !booking.getUser().equals(user)).forEach(booking -> {
             try {
                 bookingDao.removeEntity(booking);
             } catch (DaoException e) {
