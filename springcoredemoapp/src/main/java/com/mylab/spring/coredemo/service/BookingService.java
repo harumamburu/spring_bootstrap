@@ -25,7 +25,7 @@ public class BookingService extends AbstractService {
     @Value("${booking.vip.coefficient:1.5}")
     private Double vipCoeff;
 
-    public void bookTicket(User user, Ticket ticket) throws DaoException {
+    public Booking bookTicket(User user, Ticket ticket) throws DaoException {
         if (auditoriumDao.getNumberOfSeats(ticket.getEvent().getAuditorium().getId()) < ticket.getSeat()) {
             throw new IllegalDaoRequestException("No such seat available");
         }
@@ -47,7 +47,7 @@ public class BookingService extends AbstractService {
             bookingDao.saveEntity(new Booking(ticket, user));
         }
 
-        ticketDao.saveEntity(ticket);
+        return new Booking(ticketDao.saveEntity(ticket), user);
     }
 
     public double getTicketPrice(Event event, String date, String time, List<Integer> seats, User user) throws DaoException {
@@ -57,7 +57,8 @@ public class BookingService extends AbstractService {
             throw new EntityNotFoundException("Event's description and provided times don't match");
         }
 
-        return ticketDao.getTicketsForEvent(event).parallelStream().filter(ticket -> user.equals(user)).mapToDouble(Ticket::getPrice).sum();
+        return bookingDao.getBookingsForEventUser(event, user).parallelStream().map(Booking::getTicket)
+                .mapToDouble(Ticket::getPrice).sum();
     }
 
     public List<Ticket> getTicketsForEventAt(Event event, String date) throws DaoException {

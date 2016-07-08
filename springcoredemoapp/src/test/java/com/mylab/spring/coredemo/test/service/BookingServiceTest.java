@@ -7,6 +7,7 @@ import com.mylab.spring.coredemo.dao.exception.DaoException;
 import com.mylab.spring.coredemo.dao.exception.EntityAlreadyExistsException;
 import com.mylab.spring.coredemo.dao.exception.EntityNotFoundException;
 import com.mylab.spring.coredemo.dao.exception.IllegalDaoRequestException;
+import com.mylab.spring.coredemo.entity.Booking;
 import com.mylab.spring.coredemo.entity.Event;
 import com.mylab.spring.coredemo.entity.Ticket;
 import com.mylab.spring.coredemo.entity.User;
@@ -48,7 +49,7 @@ public class BookingServiceTest extends AbstractServiceTest<BookingService> {
     private String timeFormat;
     private String date;
     private String time;
-    private Double price;
+    private double price = 0d;
 
     @DataProvider(name = "seatsProvider")
     private Iterator<Object[]> provideSeats() {
@@ -84,11 +85,6 @@ public class BookingServiceTest extends AbstractServiceTest<BookingService> {
     }
 
     @BeforeClass
-    private void setEventPrice() {
-        price = event.getBasePrice();
-    }
-
-    @BeforeClass
     private void persistDependencies() throws DaoException {
         auditoriumDao.saveEntity(event.getAuditorium());
         userDao.saveEntity(user);
@@ -98,7 +94,9 @@ public class BookingServiceTest extends AbstractServiceTest<BookingService> {
 
     @Test(dataProvider = "seatsProvider")
     public void bookTicket(Integer seat) throws DaoException {
-        service.bookTicket(user, new Ticket(event, seat));
+        Booking booking = service.bookTicket(user, new Ticket(event, seat));
+        price += booking.getTicket().getPrice();
+        // TODO add assertion logic
     }
 
     @Test(priority = 1)
