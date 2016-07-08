@@ -1,6 +1,5 @@
 package com.mylab.spring.coredemo.entity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Auditorium implements Entity, Named {
@@ -8,10 +7,7 @@ public class Auditorium implements Entity, Named {
     private Long id;
     private String name;
     private Integer numberOfSeats;
-    // OneToMany
     private List<Integer> vipSeats;
-    // OneToMany
-    private List<Event> events = new ArrayList<>();
 
     public Auditorium() {}
 
@@ -56,14 +52,6 @@ public class Auditorium implements Entity, Named {
         this.vipSeats = vipSeats;
     }
 
-    public List<Event> getEvents() {
-        return events;
-    }
-
-    public void setEvents(List<Event> events) {
-        this.events = events;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -74,9 +62,7 @@ public class Auditorium implements Entity, Named {
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (!name.equals(that.name)) return false;
         if (!numberOfSeats.equals(that.numberOfSeats)) return false;
-        if (!vipSeats.equals(that.vipSeats)) return false;
-        return events.equals(that.events);
-
+        return vipSeats.equals(that.vipSeats);
     }
 
     @Override
@@ -85,7 +71,6 @@ public class Auditorium implements Entity, Named {
         result = 31 * result + name.hashCode();
         result = 31 * result + numberOfSeats.hashCode();
         result = 31 * result + vipSeats.hashCode();
-        result = 31 * result + events.hashCode();
         return result;
     }
 
@@ -96,7 +81,6 @@ public class Auditorium implements Entity, Named {
         sb.append(", name='").append(name).append('\'');
         sb.append(", numberOfSeats=").append(numberOfSeats);
         sb.append(", vipSeats=").append(vipSeats);
-        sb.append(", events=").append(events);
         sb.append('}');
         return sb.toString();
     }
