@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 
 import javax.annotation.Resource;
 
+@Test(groups = "userDaoTest")
 public class UserDaoTest extends NamingDaoTest<User, UserDao> {
 
     @Override
@@ -26,89 +27,68 @@ public class UserDaoTest extends NamingDaoTest<User, UserDao> {
     }
 
 
-    @Test(groups = { "saveTests", "userSaveTests"})
+    @Test
     public void saveUser() throws DaoException {
         saveEntity();
     }
 
-    @Test(dependsOnMethods = "saveUser",
-            groups = {"gettersTests", "userGettersTest"},
-            priority = 1)
+    @Test(dependsOnMethods = "saveUser", priority = 1)
     public void getUserById() throws DaoException {
         getEntityById();
     }
 
-    @Test(dependsOnMethods = "saveUser",
-            groups = {"gettersTests", "userGettersTest"},
-            priority = 1)
+    @Test(dependsOnMethods = "saveUser", priority = 1)
     public void getUserByName() throws DaoException {
         getEntityByName();
     }
 
-    @Test(dependsOnMethods = "saveUser",
-            groups = {"gettersTests", "userGettersTest"},
-            priority = 1)
+    @Test(dependsOnMethods = "saveUser", priority = 1)
     public void getUserByEmail() throws DaoException  {
         Assert.assertEquals(dao.getUserByEmail(entity.getEmail()), entity, "Failed to get user by Email");
     }
 
-    @Test(groups = {"negativeTests", "saveTests", "userSaveTests"},
-            priority = 2,
-            expectedExceptions = EntityAlreadyExistsException.class)
+    @Test(priority = 2, expectedExceptions = EntityAlreadyExistsException.class)
     public void saveUserWithUniqueNameViolated() throws DaoException {
         saveEntityWithUniqueNameViolated();
     }
 
-    @Test(groups = {"negativeTests", "saveTests", "userSaveTests"},
-            priority = 2,
-            expectedExceptions = EntityAlreadyExistsException.class)
+    @Test(priority = 2, expectedExceptions = EntityAlreadyExistsException.class)
     public void saveUserWithUniqueEmailViolated() throws DaoException {
         User newUser = copyEntity(entity);
         newUser.setEmail("New" + entity.getEmail());
         dao.saveEntity(entity);
     }
 
-    @Test(groups = {"negativeTests", "gettersTests", "userGettersTests"},
-            priority = 2,
-            expectedExceptions = EntityNotFoundException.class)
+    @Test(priority = 2, expectedExceptions = EntityNotFoundException.class)
     public void getNonExistingUserById() throws DaoException {
         getNonExistingEntityById();
     }
 
-    @Test(groups = {"negativeTests", "gettersTests", "userGettersTests"},
-            priority = 2,
-            expectedExceptions = EntityNotFoundException.class)
+    @Test(priority = 2, expectedExceptions = EntityNotFoundException.class)
     public void getNonExistingUserByName() throws DaoException {
         getNonExistingEntityByName();
     }
 
-    @Test(groups = {"negativeTests", "gettersTests", "userGettersTests"},
-            priority = 2,
-            expectedExceptions = EntityNotFoundException.class)
+    @Test(priority = 2, expectedExceptions = EntityNotFoundException.class)
     public void getNonExistingUserByEmail() throws DaoException {
         dao.getUserByEmail("");
     }
 
-    @Test(groups = {"deletingTests", "userDeletingTests", "negativeTests"},
-            priority = 3,
-            expectedExceptions = EntityNotFoundException.class)
+    @Test(priority = 3, expectedExceptions = EntityNotFoundException.class)
     public void deleteNonExistingUser() throws DaoException {
         deleteNonExistingEntity();
     }
 
-    @Test(groups = {"deletingTests", "userDeletingTests", "negativeTests"},
-            priority = 3,
-            expectedExceptions = DaoException.class)
+    @Test(priority = 3, expectedExceptions = DaoException.class)
     public void deleteUserWithNullId() throws DaoException {
         deleteEntityWithNullId();
     }
 
-    @Test(dependsOnMethods = "saveUser",
-            groups = {"deletingTests", "userDeletingTests"},
-            priority = 4)
+    @Test(dependsOnMethods = { "getUserById", "getUserByName", "getUserByEmail" }, priority = 4)
     public void deleteUser() throws DaoException {
         deleteEntity();
     }
+
 
     protected User copyEntity(User oldUser) {
         User newUser = new User(oldUser.getName(), oldUser.getEmail());

@@ -16,6 +16,7 @@ import javax.annotation.Resource;
 import java.util.Iterator;
 import java.util.List;
 
+@Test(groups = "auditoriumDaoTest")
 public class AuditoriumsDaoTest extends NamingDaoTest<Auditorium, AuditoriumDao>
         implements BulkDaoTest<Auditorium, AuditoriumDao> {
 
@@ -52,105 +53,83 @@ public class AuditoriumsDaoTest extends NamingDaoTest<Auditorium, AuditoriumDao>
     }
 
 
-    @Test(groups = {"saveTests", "auditoriumsSaveTests"}, dataProvider = "auditoriumsPopulator")
+    @Test(dataProvider = "auditoriumsPopulator")
     protected void saveAuditorium(Auditorium auditorium) throws DaoException {
         entity = dao.saveEntity(auditorium);
         assertSaving(entity);
     }
 
-    @Test(dependsOnMethods = "saveAuditorium",
-            groups = {"gettersTests", "auditoriumGettersTests"},
-            priority = 1)
+    @Test(dependsOnMethods = "saveAuditorium", priority = 1)
     protected void getAuditoriumById() throws DaoException {
         getEntityById();
     }
 
-    @Test(dependsOnMethods = "saveAuditorium",
-            groups = {"gettersTests", "auditoriumGettersTests"},
-            priority = 1)
+    @Test(dependsOnMethods = "saveAuditorium", priority = 1)
     protected void getAuditoriumByName() throws DaoException {
         super.getEntityByName();
     }
 
     @Override
-    @Test(dependsOnMethods = "saveAuditorium",
-            groups = {"gettersTests", "auditoriumGettersTests", "bulkTests"},
-            priority = 1)
+    @Test(dependsOnMethods = "saveAuditorium", priority = 1)
     public void getAllEntities() {
         Assert.assertEquals(dao.getAllEntities(), auditoriums, "Not all auditoriums match");
     }
 
-    @Test(dependsOnMethods = "saveAuditorium",
-            groups = {"gettersTests", "auditoriumGettersTests"},
-            priority = 1)
+    @Test(dependsOnMethods = "saveAuditorium", priority = 1)
     public void getNumberOfSeats() throws DaoException {
         Assert.assertEquals(dao.getNumberOfSeats(entity.getId()),
                 entity.getNumberOfSeats(), "Number of seats doesn't match");
     }
 
-    @Test(dependsOnMethods = "saveAuditorium",
-            groups = {"gettersTests", "auditoriumGettersTests", "bulkTests"},
-            priority = 1)
+    @Test(dependsOnMethods = "saveAuditorium", priority = 1)
     public void getVipSeats() throws DaoException {
         Assert.assertEquals(dao.getVipSeats(entity.getId()),
                 entity.getVipSeats(), "Vip seats doesn't match");
     }
 
-    @Test(groups = {"negativeTests", "saveTests", "auditoriumSaveTests"},
-            priority = 2,
-            expectedExceptions = EntityAlreadyExistsException.class)
+    @Test(priority = 2, expectedExceptions = EntityAlreadyExistsException.class)
     protected void saveAuditoriumWithUniqueNameViolated() throws DaoException {
         saveEntityWithUniqueNameViolated();
     }
 
-    @Test(groups = {"negativeTests", "gettersTests", "auditoriumGettersTests"},
-            priority = 2,
-            expectedExceptions = EntityNotFoundException.class)
+    @Test(priority = 2, expectedExceptions = EntityNotFoundException.class)
     protected void getNonExistingAuditoriumById() throws DaoException {
         getNonExistingEntityById();
     }
 
-    @Test(groups = {"negativeTests", "gettersTests", "auditoriumGettersTests"},
-            priority = 2,
-            expectedExceptions = EntityNotFoundException.class)
+    @Test(priority = 2, expectedExceptions = EntityNotFoundException.class)
     protected void getNonExistingAuditoriumByName() throws DaoException {
         getNonExistingEntityByName();
     }
 
-    @Test(groups = {"negativeTests", "gettersTests", "auditoriumGettersTests", "bulkTests"},
-            priority = 2,
-            expectedExceptions = EntityNotFoundException.class)
+    @Test(priority = 2, expectedExceptions = EntityNotFoundException.class)
     protected void getNonExistingAuditoriumSeatsNumber() throws DaoException {
         dao.getNumberOfSeats(Long.MAX_VALUE);
     }
 
-    @Test(groups = {"negativeTests", "gettersTests", "auditoriumGettersTests", "bulkTests"},
-            priority = 2,
-            expectedExceptions = EntityNotFoundException.class)
+    @Test(priority = 2, expectedExceptions = EntityNotFoundException.class)
     protected void getNonExistingAuditoriumVipSeats() throws DaoException {
         dao.getVipSeats(Long.MAX_VALUE);
     }
 
-    @Test(groups = {"deletingTests", "auditoriumDeletingTests", "negativeTests"},
-            priority = 3,
-            expectedExceptions = EntityNotFoundException.class)
+    @Test(priority = 3, expectedExceptions = EntityNotFoundException.class)
     protected void deleteNonExistingAuditorium() throws DaoException {
         deleteNonExistingEntity();
     }
 
-    @Test(groups = {"deletingTests", "auditoriumDeletingTests", "negativeTests"},
-            priority = 3,
-            expectedExceptions = DaoException.class)
+    @Test(priority = 3, expectedExceptions = DaoException.class)
     protected void deleteAuditoriumWithNullId() throws DaoException {
         deleteEntityWithNullId();
     }
 
-    @Test(dependsOnMethods = "saveAuditorium",
-            groups = {"deletingTests", "auditoriumDeletingTests"},
-            priority = 4)
-    protected void deleteAuditorium() throws DaoException {
+    @Test(dataProvider = "auditoriumsPopulator", priority = 4,
+            dependsOnMethods = { "getAuditoriumById", "getAuditoriumByName",
+                    "getAllEntities", "getNumberOfSeats", "getVipSeats" })
+    protected void deleteAuditorium(Auditorium auditorium) throws DaoException {
+        entity = auditorium;
         deleteEntity();
     }
+
 
     @Override
     protected Auditorium copyEntity(Auditorium entity) {

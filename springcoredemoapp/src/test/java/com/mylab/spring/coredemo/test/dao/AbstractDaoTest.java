@@ -6,7 +6,9 @@ import com.mylab.spring.coredemo.dao.exception.EntityNotFoundException;
 import com.mylab.spring.coredemo.entity.Entity;
 import com.mylab.spring.coredemo.test.BaseTest;
 import org.testng.Assert;
+import org.testng.annotations.Test;
 
+@Test(groups = "daoTest")
 public abstract class AbstractDaoTest<T extends Entity, K extends Dao<T>> extends BaseTest {
 
     protected K dao;

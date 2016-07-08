@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+@Test(groups = "eventsDaoTest")
 public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements BulkDaoTest<Event, EventDao> {
 
     @Autowired
@@ -61,44 +62,35 @@ public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements Bul
     }
 
 
-    @Test(groups = {"saveTests", "eventSaveTests"},
-            dataProvider = "eventsListPopulator")
+    @Test(dataProvider = "eventsListPopulator")
     public void saveEvent(Event event) throws DaoException {
         entity = dao.saveEntity(event);
         assertSaving(entity);
     }
 
-    @Test(dependsOnMethods = "saveEvent",
-            groups = {"gettersTests", "eventGettersTests"},
-            priority = 1)
+    @Test(dependsOnMethods = "saveEvent", priority = 1)
     public void getEventById() throws DaoException {
         getEntityById();
     }
 
-    @Test(dependsOnMethods = "saveEvent",
-            groups = {"gettersTests", "eventGettersTests"},
-            priority = 1)
+    @Test(dependsOnMethods = "saveEvent", priority = 1)
     public void getEventByName() throws DaoException {
         getEntityByName();
     }
 
-    @Test(dependsOnMethods = "saveEvent",
-            groups = {"gettersTests", "eventGettersTests", "bulkTests"},
-            priority = 1)
+    @Test(dependsOnMethods = "saveEvent", priority = 1)
     public void getEventsInRange() throws DaoException {
         assertEqualListAndFilteredEvents(dao.getEventsInRange(from, to),
                 event -> event.getDate().after(from) && event.getDate().before(to));
     }
 
-    @Test(dependsOnMethods = "saveEvent",
-            groups = {"gettersTests", "eventGettersTests", "bulkTests"},
-            priority = 1)
+    @Test(dependsOnMethods = "saveEvent", priority = 1)
     public void getEventsToDate() throws DaoException {
         assertEqualListAndFilteredEvents(dao.getEventsInRange(new Date(), to),
                 event -> event.getDate().after(new Date()) && event.getDate().before(to));
     }
 
-    @Test(groups = {"gettersTests", "eventGettersTests", "bulkTests"}, priority = 1)
+    @Test(priority = 1)
     public void getEventsInOldRange() throws DaoException {
         Date oldFrom = substractWeeks(from, 4);
         Date oldTo = substractWeeks(to, 4);
@@ -116,68 +108,54 @@ public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements Bul
     }
 
     @Override
-    @Test(dependsOnMethods = "saveEvent",
-            groups = {"gettersTests", "eventGettersTests", "bulkTests"},
-            priority = 1)
+    @Test(dependsOnMethods = "saveEvent", priority = 1)
     public void getAllEntities() {
         Assert.assertEquals(dao.getAllEntities(), events, "Not same events were returned");
     }
 
-    @Test(groups = {"negativeTests", "saveTests", "eventSaveTests"},
-            priority = 2,
-            expectedExceptions = EntityAlreadyExistsException.class)
+    @Test(priority = 2, expectedExceptions = EntityAlreadyExistsException.class)
     public void saveEventWithUniqueNameViolated() throws DaoException {
         saveEntityWithUniqueNameViolated();
     }
 
-    @Test(groups = {"negativeTests", "gettersTests", "eventGettersTests"},
-            priority = 2,
-            expectedExceptions = EntityNotFoundException.class)
+    @Test(priority = 2, expectedExceptions = EntityNotFoundException.class)
     public void getNonExistingEventById() throws DaoException {
         getNonExistingEntityById();
     }
 
-    @Test(groups = {"negativeTests", "gettersTests", "eventGettersTests"},
-            priority = 2,
-            expectedExceptions = EntityNotFoundException.class)
+    @Test(priority = 2, expectedExceptions = EntityNotFoundException.class)
     public void getNonExistingEventByName() throws DaoException {
         getNonExistingEntityByName();
     }
 
-    @Test(groups = {"gettersTests", "eventGettersTests", "bulkTests", "negativeTests"},
-            priority = 2,
-            expectedExceptions = IllegalDaoRequestException.class)
+    @Test(priority = 2, expectedExceptions = IllegalDaoRequestException.class)
     public void getEventsInBrokenRange() throws DaoException {
         dao.getEventsInRange(to, from);
     }
 
-    @Test(groups = {"gettersTests", "eventGettersTests", "bulkTests", "negativeTests"},
-            priority = 2,
-            expectedExceptions = IllegalDaoRequestException.class)
+    @Test(priority = 2, expectedExceptions = IllegalDaoRequestException.class)
     public void getEventsInNoRange() throws DaoException {
         dao.getEventsInRange(to, to);
     }
 
-    @Test(groups = {"deletingTests", "eventDeletingTests", "negativeTests"},
-            priority = 3,
-            expectedExceptions = EntityNotFoundException.class)
+    @Test(priority = 3, expectedExceptions = EntityNotFoundException.class)
     public void deleteNonExistingEvent() throws DaoException {
         deleteNonExistingEntity();
     }
 
-    @Test(groups = {"deletingTests", "eventDeletingTests", "negativeTests"},
-            priority = 3,
-            expectedExceptions = DaoException.class)
+    @Test(priority = 3, expectedExceptions = DaoException.class)
     public void deleteEventWithNullId() throws DaoException {
         deleteEntityWithNullId();
     }
 
-    @Test(dependsOnMethods = "saveEvent",
-            groups = {"deletingTests", "eventDeletingTests"},
-            priority = 4)
-    public void deleteEvent() throws DaoException {
+    @Test(dataProvider = "eventsListPopulator", priority = 4,
+            dependsOnMethods = { "getEventById", "getEventByName",
+                    "getEventsInRange", "getAllEntities", "getEventsToDate" })
+    public void deleteEvent(Event event) throws DaoException {
+        entity = event;
         deleteEntity();
     }
+
 
     @Override
     protected Event copyEntity(Event event) {
