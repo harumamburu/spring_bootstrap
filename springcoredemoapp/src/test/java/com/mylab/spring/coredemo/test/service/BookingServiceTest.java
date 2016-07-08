@@ -1,6 +1,8 @@
 package com.mylab.spring.coredemo.test.service;
 
 import com.mylab.spring.coredemo.dao.exception.DaoException;
+import com.mylab.spring.coredemo.dao.exception.EntityNotFoundException;
+import com.mylab.spring.coredemo.dao.exception.IllegalDaoRequestException;
 import com.mylab.spring.coredemo.entity.Event;
 import com.mylab.spring.coredemo.entity.Ticket;
 import com.mylab.spring.coredemo.entity.User;
@@ -12,17 +14,21 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import javax.annotation.Resource;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.List;
 
+@Test(groups = "bookingServiceTest")
 public class BookingServiceTest extends AbstractServiceTest<BookingService> {
 
     @Resource(name = "testUser")
     private User user;
-    @Resource()
+    @Resource(name = "testingEvent")
     private Event event;
     @Autowired
     private List<Integer> seats;
+
     @Value("test.event.date")
     private String date;
     @Value("test.event.time")
@@ -68,14 +74,24 @@ public class BookingServiceTest extends AbstractServiceTest<BookingService> {
         service.getTicketsForEventAt(event, date);
     }
 
-    @Test(dataProvider = "seatsProvider")
-    public void bookTicketForNonExistingUser(Integer seat) throws DaoException {
-        service.bookTicket(new User(), new Ticket(event, seat));
+    @Test(priority = 1)
+    public void bookTicketForNonExistingUser() throws DaoException {
+        service.bookTicket(new User(), new Ticket(event, seats.get(0)));
     }
 
-    @Test(priority = 1)
+    @Test(priority = 1, expectedExceptions = EntityNotFoundException.class)
+    public void getTicketsEventAndDateDontMatch() throws DaoException {
+        service.getTicketsForEventAt(event, DateTimeFormatter.ofPattern("M/e/y").format(LocalDate.now()));
+    }
+
+    @Test(priority = 1, expectedExceptions = EntityNotFoundException.class)
     public void getTicketsForNonExistingEvent() throws DaoException {
         service.getTicketsForEventAt(new Event(), date);
+    }
+
+    @Test(priority = 1, expectedExceptions = IllegalDaoRequestException.class)
+    public void bookTicketForSeatOutOfAuditoriumsRange() throws DaoException {
+        service.bookTicket(user, new Ticket(event, event.getAuditorium().getNumberOfSeats() + 1));
     }
 
 }
