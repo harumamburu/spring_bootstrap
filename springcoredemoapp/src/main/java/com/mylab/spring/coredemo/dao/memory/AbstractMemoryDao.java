@@ -7,9 +7,10 @@ import com.mylab.spring.coredemo.dao.exception.EntityNotFoundException;
 import com.mylab.spring.coredemo.entity.Entity;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
+
+import static java.util.Optional.ofNullable;
 
 public abstract class AbstractMemoryDao<T extends Entity> implements Dao<T> {
 
@@ -38,17 +39,28 @@ public abstract class AbstractMemoryDao<T extends Entity> implements Dao<T> {
 
     @Override
     public T getEntityById(Long id) throws DaoException {
-        return Optional.ofNullable(getStorage().get(id))
+        return ofNullable(getStorage().get(id))
                 .orElseThrow(supplyEntityNotFound(id));
     }
 
     @Override
     public T removeEntity(T entity) throws DaoException {
+        checkEntityId(entity);
+        return ofNullable(getStorage().remove(entity.getId()))
+                .orElseThrow(supplyEntityNotFound(entity.getId()));
+    }
+
+    private void checkEntityId(T entity) throws DaoException {
         if (entity.isIdNull()) {
             throw new DaoException("Entity id is null");
         }
-        return Optional.ofNullable(getStorage().remove(entity.getId()))
-                .orElseThrow(supplyEntityNotFound(entity.getId()));
+    }
+
+    @Override
+    public T updateEntity(T entity) throws DaoException {
+        checkEntityId(entity);
+        getStorage().put(entity.getId(), entity);
+        return entity;
     }
 
     private Supplier<EntityNotFoundException> supplyEntityNotFound(Long id) {

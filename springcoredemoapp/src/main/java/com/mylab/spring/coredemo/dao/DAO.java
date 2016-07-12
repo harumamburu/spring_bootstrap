@@ -8,4 +8,5 @@ public interface Dao<T extends Entity> {
     T saveEntity(T entity) throws DaoException;
     T getEntityById(Long id) throws DaoException;
     T removeEntity(T entity) throws DaoException;
+    T updateEntity(T entity) throws DaoException;
 }
