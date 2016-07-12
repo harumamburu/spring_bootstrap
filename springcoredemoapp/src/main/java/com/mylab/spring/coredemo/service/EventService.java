@@ -6,6 +6,7 @@ import com.mylab.spring.coredemo.entity.Event;
 import com.mylab.spring.coredemo.entity.enumeration.Rating;
 
 import java.util.Date;
+import java.util.List;
 
 public class EventService extends AbstractService {
 
@@ -20,5 +21,25 @@ public class EventService extends AbstractService {
         Event eventAt = eventDao.getEventAtDate(event, date);
         eventAt.setAuditorium(auditorium);
         eventDao.updateEntity(event);
+    }
+
+    public Event getEventByName(String name) throws DaoException {
+        return eventDao.getEntityByName(name);
+    }
+
+    public List<Event> getAllEvents() {
+        return eventDao.getAllEntities();
+    }
+
+    public List<Event> getEventsInRange(Date from, Date to) throws DaoException {
+        return eventDao.getEventsInRange(from, to);
+    }
+
+    public List<Event> getEventsUpToDate(Date to) throws DaoException {
+        return eventDao.getEventsInRange(new Date(), to);
+    }
+
+    public Event removeEvent(Event event) throws DaoException {
+        return eventDao.removeEntity(event);
     }
 }
