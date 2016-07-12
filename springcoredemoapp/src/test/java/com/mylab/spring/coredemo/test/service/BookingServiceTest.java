@@ -2,6 +2,7 @@ package com.mylab.spring.coredemo.test.service;
 
 import com.mylab.spring.coredemo.dao.AuditoriumDao;
 import com.mylab.spring.coredemo.dao.EventDao;
+import com.mylab.spring.coredemo.dao.TicketDao;
 import com.mylab.spring.coredemo.dao.UserDao;
 import com.mylab.spring.coredemo.dao.exception.DaoException;
 import com.mylab.spring.coredemo.dao.exception.EntityAlreadyExistsException;
@@ -25,6 +26,8 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Test(groups = "bookingServiceTest")
 public class BookingServiceTest extends AbstractServiceTest<BookingService> {
@@ -40,6 +43,8 @@ public class BookingServiceTest extends AbstractServiceTest<BookingService> {
     private AuditoriumDao auditoriumDao;
     @Autowired
     private EventDao eventDao;
+    @Autowired
+    private TicketDao ticketDao;
 
     @Value("#{'${test.bookingserv.ticket.seats}'.split(',')}")
     private List<Integer> seats;
@@ -55,7 +60,7 @@ public class BookingServiceTest extends AbstractServiceTest<BookingService> {
     private Iterator<Object[]> provideSeats() {
         return new Iterator<Object[]>() {
             Iterator<Integer> internal = seats.iterator();
-            // skip one seat to be able to check booking fof non-existing user
+            // skip one seat to be able to check booking for non-existing user
             {
                 if (internal.hasNext()) {
                     internal.next();
@@ -109,13 +114,25 @@ public class BookingServiceTest extends AbstractServiceTest<BookingService> {
     }
 
     @Test(priority = 1)
-    public void getTickets() throws DaoException {
-        service.getTicketsForEventAt(event, date);
+    public void getTicketsForEventAtDate() throws DaoException {
+        Function<Integer, Ticket> createTicketsForEvent = seat -> new Ticket(event, seat);
+        List<Ticket> expected = seats.stream().map(createTicketsForEvent).collect(Collectors.toList());
+        List<Ticket> actual = service.getTicketsForEventAt(event, date);
+        Assert.assertEquals(actual.stream().map(Ticket::getEvent).collect(Collectors.toList()),
+                expected.stream().map(Ticket::getEvent).collect(Collectors.toList()),
+                "Not all tickets' events match");
+        Assert.assertEquals(actual.stream().map(Ticket::getPrice).collect(Collectors.toList()),
+                actual.stream().map(Ticket::getPrice).collect(Collectors.toList()),
+                "Nor all tickets' prices match");
+        Assert.assertEquals(actual.stream().map(Ticket::getSeat).collect(Collectors.toList()),
+                actual.stream().map(Ticket::getSeat).collect(Collectors.toList()),
+                "Nor all tickets' seats match");
     }
 
     @Test(priority = 1)
     public void bookTicketForNonExistingUser() throws DaoException {
-        service.bookTicket(new User(), new Ticket(event, seats.get(0)));
+        Ticket ticket = service.bookTicket(new User(), new Ticket(event, seats.get(0))).getTicket();
+        Assert.assertEquals(ticketDao.getEntityById(ticket.getId()), ticket, "The ticket was saved incorrectly");
     }
 
     @Test(priority = 1, expectedExceptions = EntityNotFoundException.class)
