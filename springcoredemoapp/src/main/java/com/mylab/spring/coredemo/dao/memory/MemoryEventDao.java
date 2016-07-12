@@ -7,6 +7,8 @@ import com.mylab.spring.coredemo.dao.exception.EntityNotFoundException;
 import com.mylab.spring.coredemo.dao.exception.IllegalDaoRequestException;
 import com.mylab.spring.coredemo.entity.Event;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -34,21 +36,33 @@ public class MemoryEventDao extends AbstractNamingMemoryDao<Event> implements Ev
     @Override
     protected boolean isSavedAlready(Event entity) {
         // check if an event with such name on that particular date was already saved
-        return EVENTS.values().parallelStream().anyMatch(nameAndDateEqual(entity, entity.getDate()));
+        return EVENTS.values().parallelStream().anyMatch(e -> e.getName().equals(entity.getName()) &&
+                e.getDate().equals(entity.getDate()));
     }
 
     @Override
     public Event getEventAtDate(Event event, Date date) throws DaoException {
-        return EVENTS.values().parallelStream().filter(nameAndDateEqual(event, date))
+        Predicate<Event> isNameEqual = e -> e.getName().equals(event.getName());
+        Predicate<Event> isDateEqual = e -> LocalDate.from(e.getDate().toInstant().atZone(ZoneId.systemDefault()))
+                .equals(LocalDate.from(date.toInstant().atZone(ZoneId.systemDefault())));
+
+        return EVENTS.values().parallelStream().filter(isNameEqual.and(isDateEqual))
                 .findFirst()
                 .orElseThrow(() ->new EntityNotFoundException(
-                        String.format("No event with name %s at %t was found", event.getName(), date)));
+                        String.format("No event with name %s at %s was found", event.getName(), date.toString())));
     }
 
-    private Predicate<Event> nameAndDateEqual(Event entity, Date date) {
-        Predicate<Event> isNameEqual = event -> event.getName().equals(entity.getName());
-        Predicate<Event> isDateEqual = event -> event.getDate().equals(date);
-        return isNameEqual.and(isDateEqual);
+    @Override
+    public List<Event> getEventsAtDate(Event event, Date date) {
+        int year = getLocalDatefromDate(date).getYear();
+        int day = getLocalDatefromDate(date).getDayOfYear();
+        return EVENTS.values().parallelStream().filter(e -> e.getName().equals(event.getName()) &&
+                getLocalDatefromDate(e.getDate()).getYear() == year &&
+                getLocalDatefromDate(e.getDate()).getDayOfYear() == day).collect(Collectors.toList());
+    }
+
+    private LocalDate getLocalDatefromDate(Date date) {
+        return LocalDate.from(date.toInstant().atZone(ZoneId.systemDefault()));
     }
 
     @Override
