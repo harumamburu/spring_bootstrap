@@ -11,4 +11,7 @@
 
     <bean id="testingBookingService" class="com.mylab.spring.coredemo.service.BookingService"
           scope="prototype" lazy-init="true"/>
+
+    <bean id="testingEventService" class="com.mylab.spring.coredemo.service.EventService"
+          scope="prototype" lazy-init="true"/>
 </beans>
