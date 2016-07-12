@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class MemoryEventDao extends AbstractNamingMemoryDao<Event> implements EventDao {
@@ -30,8 +31,10 @@ public class MemoryEventDao extends AbstractNamingMemoryDao<Event> implements Ev
 
     @Override
     protected boolean isSavedAlready(Event entity) {
-        // check if an event with such name was already saved
-        return EVENTS.values().parallelStream().anyMatch(event -> event.getName().equals(entity.getName()));
+        // check if an event with such name on that particular date was already saved
+        Predicate<Event> isNameEqual = event -> event.getName().equals(entity.getName());
+        Predicate<Event> isDateEqual = event -> event.getDate().equals(entity.getDate());
+        return EVENTS.values().parallelStream().anyMatch(isNameEqual.and(isDateEqual));
     }
 
     @Override

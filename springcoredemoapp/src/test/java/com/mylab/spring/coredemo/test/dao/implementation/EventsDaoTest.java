@@ -68,6 +68,15 @@ public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements Bul
         assertSaving(entity);
     }
 
+    @Test
+    public void saveEventWithSameNameOtherDates() throws DaoException {
+        Event event = copyEntity(events.get(0));
+        event.setDate(Date.from(
+                event.getDate().toInstant().atZone(ZoneId.systemDefault()).plusHours(6).toInstant()));
+        assertSaving(dao.saveEntity(event));
+        events.add(event);
+    }
+
     @Test(dependsOnMethods = "saveEvent", priority = 1)
     public void getEventById() throws DaoException {
         getEntityById();
@@ -114,7 +123,7 @@ public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements Bul
     }
 
     @Test(priority = 2, expectedExceptions = EntityAlreadyExistsException.class)
-    public void saveEventWithUniqueNameViolated() throws DaoException {
+    public void saveEventWithUniqueNameAndDatesViolated() throws DaoException {
         saveEntityWithUniqueNameViolated();
     }
 
