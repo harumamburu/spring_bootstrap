@@ -2,6 +2,8 @@ package com.mylab.spring.coredemo.dao.memory;
 
 import com.mylab.spring.coredemo.dao.EventDao
         ;
+import com.mylab.spring.coredemo.dao.exception.DaoException;
+import com.mylab.spring.coredemo.dao.exception.EntityNotFoundException;
 import com.mylab.spring.coredemo.dao.exception.IllegalDaoRequestException;
 import com.mylab.spring.coredemo.entity.Event;
 
@@ -32,9 +34,21 @@ public class MemoryEventDao extends AbstractNamingMemoryDao<Event> implements Ev
     @Override
     protected boolean isSavedAlready(Event entity) {
         // check if an event with such name on that particular date was already saved
+        return EVENTS.values().parallelStream().anyMatch(nameAndDateEqual(entity, entity.getDate()));
+    }
+
+    @Override
+    public Event getEventAtDate(Event event, Date date) throws DaoException {
+        return EVENTS.values().parallelStream().filter(nameAndDateEqual(event, date))
+                .findFirst()
+                .orElseThrow(() ->new EntityNotFoundException(
+                        String.format("No event with name %s at %t was found", event.getName(), date)));
+    }
+
+    private Predicate<Event> nameAndDateEqual(Event entity, Date date) {
         Predicate<Event> isNameEqual = event -> event.getName().equals(entity.getName());
-        Predicate<Event> isDateEqual = event -> event.getDate().equals(entity.getDate());
-        return EVENTS.values().parallelStream().anyMatch(isNameEqual.and(isDateEqual));
+        Predicate<Event> isDateEqual = event -> event.getDate().equals(date);
+        return isNameEqual.and(isDateEqual);
     }
 
     @Override

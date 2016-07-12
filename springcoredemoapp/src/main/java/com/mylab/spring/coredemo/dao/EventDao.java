@@ -9,4 +9,5 @@ import java.util.List;
 public interface EventDao extends NamingDao<Event>, BulkDao<Event> {
 
     List<Event> getEventsInRange(Date from, Date to) throws DaoException;
+    Event getEventAtDate(Event event, Date date) throws DaoException;
 }

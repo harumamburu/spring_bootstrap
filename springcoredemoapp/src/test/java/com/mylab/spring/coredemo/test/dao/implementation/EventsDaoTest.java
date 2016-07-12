@@ -10,6 +10,7 @@ import com.mylab.spring.coredemo.test.dao.BulkDaoTest;
 import com.mylab.spring.coredemo.test.dao.NamingDaoTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -32,6 +33,8 @@ public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements Bul
     private Date from;
     @Resource(name = "toDate")
     private Date to;
+    private Date eventDatePlusSixH;
+    private Event shiftedEvent;
 
     @Override
     @Resource(name = "testingEvent")
@@ -61,6 +64,13 @@ public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements Bul
         };
     }
 
+    @BeforeClass
+    public void shiftEventDate() {
+        eventDatePlusSixH = Date.from(entity.getDate().toInstant().atZone(ZoneId.systemDefault()).plusHours(6).toInstant());
+        shiftedEvent = copyEntity(entity);
+        shiftedEvent.setDate(eventDatePlusSixH);
+    }
+
 
     @Test(dataProvider = "eventsListPopulator")
     public void saveEvent(Event event) throws DaoException {
@@ -70,11 +80,8 @@ public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements Bul
 
     @Test
     public void saveEventWithSameNameOtherDates() throws DaoException {
-        Event event = copyEntity(events.get(0));
-        event.setDate(Date.from(
-                event.getDate().toInstant().atZone(ZoneId.systemDefault()).plusHours(6).toInstant()));
-        assertSaving(dao.saveEntity(event));
-        events.add(event);
+        assertSaving(dao.saveEntity(shiftedEvent));
+        events.add(shiftedEvent);
     }
 
     @Test(dependsOnMethods = "saveEvent", priority = 1)
@@ -85,6 +92,11 @@ public class EventsDaoTest extends NamingDaoTest<Event, EventDao> implements Bul
     @Test(dependsOnMethods = "saveEvent", priority = 1)
     public void getEventByName() throws DaoException {
         getEntityByName();
+    }
+
+    @Test(dependsOnMethods = "saveEventWithSameNameOtherDates", priority = 1)
+    public void getParticularEventAtDate() throws DaoException {
+        Assert.assertEquals(dao.getEventAtDate(shiftedEvent, eventDatePlusSixH), shiftedEvent);
     }
 
     @Test(dependsOnMethods = "saveEvent", priority = 1)
