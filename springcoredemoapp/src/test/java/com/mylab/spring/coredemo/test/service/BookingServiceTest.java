@@ -96,7 +96,11 @@ public class BookingServiceTest extends AbstractServiceTest<BookingService> {
     public void bookTicket(Integer seat) throws DaoException {
         Booking booking = service.bookTicket(user, new Ticket(event, seat));
         price += booking.getTicket().getPrice();
-        // TODO add assertion logic
+        Assert.assertNotNull(booking, "Booking wasn't saved");
+        Assert.assertNotNull(booking.getId(), "Booking id wasn't set");
+        Assert.assertEquals(booking.getUser(), user);
+        Assert.assertEquals(booking.getTicket().getEvent(), event, "Booking's event is incorrect");
+        Assert.assertEquals(booking.getTicket().getSeat(), seat, "Booking's seat is incorrect");
     }
 
     @Test(priority = 1)

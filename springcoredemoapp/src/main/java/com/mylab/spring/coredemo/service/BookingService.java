@@ -43,11 +43,14 @@ public class BookingService extends AbstractService {
             }
         } catch (DaoException exc){}
 
-        if (confirmedUser != null) {
-            bookingDao.saveEntity(new Booking(ticket, user));
-        }
 
-        return new Booking(ticketDao.saveEntity(ticket), user);
+        ticket = ticketDao.saveEntity(ticket);
+        Booking booking = new Booking(ticket, user);
+
+        if (confirmedUser != null) {
+            booking = bookingDao.saveEntity(booking);
+        }
+        return booking;
     }
 
     public double getTicketPrice(Event event, String date, String time, List<Integer> seats, User user) throws DaoException {
