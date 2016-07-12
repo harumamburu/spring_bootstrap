@@ -9,12 +9,11 @@ import com.mylab.spring.coredemo.entity.Ticket;
 import com.mylab.spring.coredemo.entity.User;
 import org.springframework.beans.factory.annotation.Value;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
-import java.util.stream.DoubleStream;
+import java.util.stream.Collectors;
 
 public class BookingService extends AbstractService {
 
@@ -24,6 +23,11 @@ public class BookingService extends AbstractService {
 
     @Value("${booking.vip.coefficient:1.5}")
     private Double vipCoeff;
+    @Value("${test.bookingserv.dateformat}")
+    private String dateFormat;
+    @Value("${test.bookingserv.timeformat}")
+    private String timeFormat;
+
 
     public Booking bookTicket(User user, Ticket ticket) throws DaoException {
         if (auditoriumDao.getNumberOfSeats(ticket.getEvent().getAuditorium().getId()) < ticket.getSeat()) {
@@ -54,38 +58,28 @@ public class BookingService extends AbstractService {
     }
 
     public double getTicketPrice(Event event, String date, String time, List<Integer> seats, User user) throws DaoException {
-        Event confirmedEvent = confirmEventRegistration(event);
-
-        if (!DateTimeFormatter.ofPattern("H:m").format(event.getDate().toInstant().atZone(ZoneId.systemDefault())).equals(time)) {
-            throw new EntityNotFoundException("Event's description and provided times don't match");
-        }
-
-        return bookingDao.getBookingsForEventUser(event, user).parallelStream().map(Booking::getTicket)
+        Date eventDate = parseDate(date + " " + time, dateFormat + " " + timeFormat);
+        return bookingDao.getBookingsForEventUser(eventDao.getEventAtDate(event, eventDate), user).parallelStream()
+                .map(Booking::getTicket)
+                .filter(ticket -> seats.contains(ticket.getSeat()))
                 .mapToDouble(Ticket::getPrice).sum();
     }
 
+    private Date parseDate(String date, String format) throws IllegalDaoRequestException {
+        try {
+            return Date.from(new SimpleDateFormat(format).parse(date).toInstant());
+        } catch (ParseException e) {
+            throw new IllegalDaoRequestException("Failed to parse provided date");
+        }
+    }
+
     public List<Ticket> getTicketsForEventAt(Event event, String date) throws DaoException {
-        Event confirmedEvent = confirmEventRegistration(event);
-
-        if (LocalDate.from(confirmedEvent.getDate().toInstant().atZone(ZoneId.systemDefault()))
-                .compareTo(LocalDate.parse(date, DateTimeFormatter.ofPattern("M/d/y"))) != 0) {
-            throw new EntityNotFoundException("Event's description and provided dates don't match");
+        Date eventDate = parseDate(date, dateFormat);
+        List<Event> events = eventDao.getEventsAtDate(event, eventDate);
+        if (events.isEmpty()) {
+            throw new EntityNotFoundException("No such events at specified date found");
         }
-
-        return ticketDao.getTicketsForEvent(confirmedEvent);
+        return events.parallelStream().flatMap(e -> ticketDao.getTicketsForEvent(e).stream())
+                .collect(Collectors.toList());
     }
-
-    private Event confirmEventRegistration(Event event) throws DaoException {
-        Event confirmedEvent;
-        if (event.getId() != null) {
-            confirmedEvent = eventDao.getEntityById(event.getId());
-        } else {
-            confirmedEvent = eventDao.getEntityByName(event.getName());
-        }
-        if (confirmedEvent == null) {
-            throw new EntityNotFoundException("No such event registered");
-        }
-        return event;
-    }
-
 }
