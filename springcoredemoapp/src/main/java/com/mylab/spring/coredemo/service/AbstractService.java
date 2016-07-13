@@ -7,7 +7,13 @@ import com.mylab.spring.coredemo.dao.TicketDao;
 import com.mylab.spring.coredemo.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.logging.Logger;
+
 public abstract class AbstractService implements Service {
+
+    protected Logger LOG() {
+        return Logger.getLogger(this.getClass().getSimpleName());
+    }
 
     @Autowired
     protected UserDao userDao;

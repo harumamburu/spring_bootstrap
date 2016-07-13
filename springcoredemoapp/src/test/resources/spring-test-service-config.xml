@@ -6,12 +6,9 @@
 
     <import resource="spring-test-dao-config.xml"/>
 
-    <bean id="testingUserService" class="com.mylab.spring.coredemo.service.UserService"
-          scope="prototype" lazy-init="true"/>
+    <bean id="testingUserService" class="com.mylab.spring.coredemo.service.UserService" lazy-init="true"/>
+    <bean id="testingBookingService" class="com.mylab.spring.coredemo.service.BookingService" lazy-init="true"/>
+    <bean id="testingEventService" class="com.mylab.spring.coredemo.service.EventService" lazy-init="true"/>
+    <bean id="testingAuditoriumService" class="com.mylab.spring.coredemo.service.AuditoriumService"/>
 
-    <bean id="testingBookingService" class="com.mylab.spring.coredemo.service.BookingService"
-          scope="prototype" lazy-init="true"/>
-
-    <bean id="testingEventService" class="com.mylab.spring.coredemo.service.EventService"
-          scope="prototype" lazy-init="true"/>
 </beans>
