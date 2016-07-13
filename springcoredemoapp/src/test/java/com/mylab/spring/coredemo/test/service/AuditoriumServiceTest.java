@@ -36,6 +36,7 @@ public class AuditoriumServiceTest extends AbstractServiceTest<AuditoriumService
     }
 
     @Override
+    @Autowired
     protected void setService(AuditoriumService service) {
         this.service = service;
     }
