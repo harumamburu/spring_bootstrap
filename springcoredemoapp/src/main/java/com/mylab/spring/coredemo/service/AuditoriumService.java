@@ -23,14 +23,14 @@ public class AuditoriumService extends AbstractService {
     }
 
     public List<Auditorium> getAllAuditoriums() {
-        return null;
+        return auditoriumDao.getAllEntities();
     }
 
-    public Integer getSeatsNumber(Long id) {
-        return null;
+    public Integer getSeatsNumber(Long id) throws DaoException {
+        return auditoriumDao.getNumberOfSeats(id);
     }
 
-    public List<Integer> getVipSeats(Long id) {
-        return null;
+    public List<Integer> getVipSeats(Long id) throws DaoException {
+        return auditoriumDao.getVipSeats(id);
     }
 }

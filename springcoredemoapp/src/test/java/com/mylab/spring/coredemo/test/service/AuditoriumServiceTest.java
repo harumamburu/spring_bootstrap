@@ -1,6 +1,7 @@
 package com.mylab.spring.coredemo.test.service;
 
 import com.mylab.spring.coredemo.dao.AuditoriumDao;
+import com.mylab.spring.coredemo.dao.exception.DaoException;
 import com.mylab.spring.coredemo.entity.Auditorium;
 import com.mylab.spring.coredemo.service.AuditoriumService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,13 +56,13 @@ public class AuditoriumServiceTest extends AbstractServiceTest<AuditoriumService
     }
 
     @Test(dataProvider = "auditoriumsPopulator")
-    public void getSeatNumbers(Auditorium auditorium) {
+    public void getSeatNumbers(Auditorium auditorium) throws DaoException {
         Assert.assertEquals(service.getSeatsNumber(auditorium.getId()), auditorium.getNumberOfSeats(),
                 "Seats numbers don't match");
     }
 
     @Test(dataProvider = "auditoriumsPopulator")
-    public void getVipSeats(Auditorium auditorium) {
+    public void getVipSeats(Auditorium auditorium) throws DaoException {
         Assert.assertEquals(service.getVipSeats(auditorium.getId()), auditorium.getVipSeats(),
                 "Vip seats lists don't match");
     }
