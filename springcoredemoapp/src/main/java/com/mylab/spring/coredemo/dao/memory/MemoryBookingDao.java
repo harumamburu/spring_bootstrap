@@ -49,6 +49,12 @@ public class MemoryBookingDao extends AbstractMemoryDao<Booking> implements Book
         return getFilteredValues(forEvent(event).and(forUser(user)));
     }
 
+    @Override
+    public List<Booking> getUserBookingsForEventAt(User user, Event event, Date date) throws DaoException {
+        checkParameters(user == null || event == null || date == null);
+        return getFilteredValues(forUser(user).and(forEvent(event)).and(atDate(date)));
+    }
+
     private List<Booking> getFilteredValues(Predicate<Booking> filter) {
         return BOOKINGS.values().parallelStream().
                 filter(filter)
