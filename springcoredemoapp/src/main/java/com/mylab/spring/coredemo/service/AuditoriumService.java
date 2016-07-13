@@ -2,18 +2,16 @@ package com.mylab.spring.coredemo.service;
 
 import com.mylab.spring.coredemo.dao.exception.DaoException;
 import com.mylab.spring.coredemo.entity.Auditorium;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.logging.Level;
 
-public class AuditoriumService extends AbstractService {
+public abstract class AuditoriumService extends AbstractService {
 
     @PostConstruct
-    @Autowired
-    private void registerAuditoriums(List<Auditorium> auditoriums) {
-        auditoriums.stream().forEach(auditorium -> {
+    private void registerAuditoriums() {
+        getAuditoriums().stream().forEach(auditorium -> {
             try {
                 auditoriumDao.saveEntity(auditorium);
             } catch (DaoException e) {
@@ -21,6 +19,9 @@ public class AuditoriumService extends AbstractService {
             }
         });
     }
+
+    // a method contract for spring method injection
+    protected abstract List<Auditorium> getAuditoriums();
 
     public List<Auditorium> getAllAuditoriums() {
         return auditoriumDao.getAllEntities();
