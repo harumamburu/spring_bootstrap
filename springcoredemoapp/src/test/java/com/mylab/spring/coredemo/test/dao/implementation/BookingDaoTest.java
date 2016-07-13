@@ -86,7 +86,7 @@ public class BookingDaoTest extends AbstractDaoTest<Booking, BookingDao> {
 
     @Test(dependsOnMethods = "saveBooking", priority = 1)
     public void getBookingsForEventAndUser() throws DaoException {
-        assertListEqualsToFiltered(dao.getBookingsForEventUser(events.get(0), user),
+        assertListEqualsToFiltered(dao.getUserBookingsForEvent(events.get(0), user),
                 booking -> booking.getUser().equals(user) && booking.getTicket().getEvent().equals(events.get(0)));
     }
 
@@ -107,7 +107,7 @@ public class BookingDaoTest extends AbstractDaoTest<Booking, BookingDao> {
 
     @Test(dependsOnMethods = "saveBooking", priority = 1)
     public void getBookingsForNonExistingEventAndUser() throws DaoException {
-        assertListEmpty(dao.getBookingsForEventUser(new Event(), new User()));
+        assertListEmpty(dao.getUserBookingsForEvent(new Event(), new User()));
     }
 
     private void assertListEmpty(List<Booking> toAssert) {
@@ -131,7 +131,7 @@ public class BookingDaoTest extends AbstractDaoTest<Booking, BookingDao> {
 
     @Test(priority = 2, expectedExceptions = IllegalDaoRequestException.class)
     public void getBookingsWithNullEventAndUser() throws DaoException {
-        dao.getBookingsForEventUser(null, null);
+        dao.getUserBookingsForEvent(null, null);
     }
 
     @Test(priority = 3, expectedExceptions = EntityNotFoundException.class)

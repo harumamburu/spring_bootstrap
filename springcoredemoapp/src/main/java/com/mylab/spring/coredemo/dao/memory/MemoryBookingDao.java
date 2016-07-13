@@ -44,7 +44,7 @@ public class MemoryBookingDao extends AbstractMemoryDao<Booking> implements Book
     }
 
     @Override
-    public List<Booking> getBookingsForEventUser(Event event, User user) throws DaoException {
+    public List<Booking> getUserBookingsForEvent(Event event, User user) throws DaoException {
         checkParameters(event == null || user == null);
         return getFilteredValues(forEvent(event).and(forUser(user)));
     }

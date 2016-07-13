@@ -59,7 +59,7 @@ public class BookingService extends AbstractService {
 
     public double getTicketPrice(Event event, String date, String time, List<Integer> seats, User user) throws DaoException {
         Date eventDate = parseDate(date + " " + time, dateFormat + " " + timeFormat);
-        return bookingDao.getBookingsForEventUser(eventDao.getEventAtDate(event, eventDate), user).parallelStream()
+        return bookingDao.getUserBookingsForEvent(eventDao.getEventAtDate(event, eventDate), user).parallelStream()
                 .map(Booking::getTicket)
                 .filter(ticket -> seats.contains(ticket.getSeat()))
                 .mapToDouble(Ticket::getPrice).sum();
